@@ -1,4 +1,3 @@
-
 const calendar = document.getElementById('calendar');
 const assignButton = document.getElementById('assign');
 const assignmentsDiv = document.getElementById('assignments');
@@ -150,16 +149,19 @@ function errorHandler(error) {
 assignButton.addEventListener('click', assignWeek);
 
 prevMonthButton.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    lastAssignedIndex = 0; // Reiniciar el índice de asignaciones al cambiar de mes
-    renderCalendar(currentDate);
+currentDate.setMonth(currentDate.getMonth() - 1);
+lastAssignedIndex = 0; // Reiniciar el índice de asignaciones al cambiar de mes
+progressBar.style.width = '0%'; // Reiniciar la barra de progreso
+renderCalendar(currentDate);
 });
 
 nextMonthButton.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    lastAssignedIndex = 0; // Reiniciar el índice de asignaciones al cambiar de mes
-    renderCalendar(currentDate);
+currentDate.setMonth(currentDate.getMonth() + 1);
+lastAssignedIndex = 0; // Reiniciar el índice de asignaciones al cambiar de mes
+progressBar.style.width = '0%'; // Reiniciar la barra de progreso
+renderCalendar(currentDate);
 });
+
 
 // Cargar asignaciones existentes al cargar la página
 window.onload = function() {
