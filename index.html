@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignación de Turnos - PatagoniaIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+   
+    
+
+<body>
+    <header class="header">
+        <h1>PatagoniaIP - Gestión de Turnos</h1>
+        <p>Conexión que transforma realidades</p>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <button class="btn" id="prevMonth">&#8592; Mes Anterior</button>
+            <h2 id="monthYear"></h2>
+            <button class="btn" id="nextMonth">Mes Siguiente &#8594;</button>
+        </div>
+
+        <div class="calendar" id="calendar"></div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <button class="btn" id="assign">Asignar Turnos para la Semana</button>
+
+        <div class="assignments" id="assignments"></div>
+    </div>
+    <div id="customAlert" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">Notificación</div>
+            <div class="modal-body">
+                <p id="customAlertMessage">Todas las semanas ya han sido asignadas.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="customAlertClose">Aceptar</button>
+            </div>
+        </div>
+
+    <footer>
+        <p>&copy; 2024 PatagoniaIP. Todos los derechos reservados. | <a href="#">Contacto</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    </div>
+    </body>
+    </html>
