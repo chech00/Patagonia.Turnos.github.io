@@ -2,18 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asignación de Turnos</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@400;500&display=swap" 
+    rel="stylesheet"
+  />
 </head>
 <body>
-  <!-- HERO / HEADER SECTION -->
   <header>
     <h1>Calendario de Turnos</h1>
   </header>
-
-  <!-- MAIN CONTENT -->
   <main>
-    <!-- CONTENEDOR DEL CALENDARIO -->
     <section class="calendar-container">
       <div class="calendar-header">
         <button id="prev-month">&laquo; Mes Anterior</button>
@@ -32,19 +35,46 @@
             <th>Domingo</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Días generados dinámicamente -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </section>
     <div style="text-align:center;">
       <button id="assign-turns" class="primary-btn">Asignar Turnos para la Semana</button>
+      <button id="open-edit-modal" class="primary-btn" style="margin-left: 1rem;" disabled>Editar Semanas</button>
     </div>
   </main>
-
   <footer>
-    <p>&copy; 2025 Empresa de Telecomunicaciones - Todos los derechos reservados.</p>
+    <p>&copy; 2025 Empresa de Telecomunicaciones PatagoniaIP SpA - Todos los derechos reservados.</p>
   </footer>
-
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Editar Semana</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="form-group">
+        <label for="edit-tecnico">Técnico:</label>
+        <select id="edit-tecnico">
+          <option value="Fabián H.">Fabián H.</option>
+          <option value="Marco V.">Marco V.</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="edit-ingeniero">Ingeniero:</label>
+        <select id="edit-ingeniero">
+          <option value="Gonzalo S.">Gonzalo S.</option>
+          <option value="Patricio G.">Patricio G.</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="edit-planta">Planta Externa:</label>
+        <select id="edit-planta">
+          <option value="Cristian V.">Cristian V.</option>
+        </select>
+      </div>
+      <button id="update-week">Actualizar Semana</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
