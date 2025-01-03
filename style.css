@@ -1,215 +1,349 @@
- /* RESET E INICIALIZACIÓN */
+    /* -------------------------------------------------------
+       RESET E INICIALIZACIÓN BÁSICA
+    ------------------------------------------------------- */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #fafafa;
-      color: #333;
-      line-height: 1.5;
-    }
-
-    /* ====== HERO (HEADER) ====== */
-    header {
-      position: relative;
-      width: 100%;
-      min-height: 40vh;
-      max-height: 600px;
-      background: url('https://images.unsplash.com/photo-1535398085021-b9d1053d3fd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1460&q=80')
-                  no-repeat center center / cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    header::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(30, 33, 63, 0.45);
-    }
-    header h1 {
-      position: relative;
-      font-family: Arial, sans-serif;
-      font-size: 2.5rem;
-      color: #fff;
-      z-index: 2;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.4);
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-
-    /* ====== CONTENEDOR PRINCIPAL ====== */
-    main {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 1200px;
-      margin: -3rem auto 2rem; /* hace que el calendario flote sobre el header */
-      padding: 0 1rem;
-    }
-
-    /* ====== CONTENEDOR DEL CALENDARIO (Estilo Tarjeta Flotante) ====== */
-    .calendar-container {
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
-      padding-bottom: 1rem;
-    }
-
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #5C6BC0;
-      color: #fff;
-      padding: 1rem;
-    }
-    .calendar-header #calendar-title {
-      font-family: Arial, sans-serif;
-      font-weight: 600;
-      font-size: 1.1rem;
-      text-transform: capitalize;
-      letter-spacing: 0.5px;
-    }
-    .calendar-header button {
-      background-color: #3949AB;
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      outline: none;
-    }
-    .calendar-header button:hover {
-      background-color: #303F9F;
-    }
-
-    /* ====== TABLA DEL CALENDARIO ====== */
-    #calendar {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-    #calendar thead {
-      background-color: #3949AB;
-    }
-    #calendar th {
-      color: #fff;
-      font-weight: normal;
-      padding: 0.8rem;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-    }
-    #calendar tbody tr {
-      transition: background-color 0.3s ease;
-    }
-    #calendar td {
-      height: 100px;
-      vertical-align: top;
-      border: 1px solid #ddd;
-      position: relative;
-      padding: 6px;
-      font-size: 0.85rem;
-    }
-    #calendar td .dia {
-      font-family: Arial, sans-serif;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 8px;
-    }
-    #calendar td .nombres {
-      display: block;
-    }
-    #calendar td .nombre {
-      border: 1px solid #b3d1ff;
-      border-radius: 4px;
-      padding: 3px 6px;
-      margin-bottom: 4px;
-      font-size: 0.75rem;
-      text-align: left;
-      transition: background-color 0.3s ease;
-      color: #000;
-      background-color: #fff;
-    }
-    #calendar td .nombre:last-child {
-      margin-bottom: 0;
-    }
-
-    /* ====== DIAS FUERA DEL MES (efecto difuminado) ====== */
-    .fuera-de-mes {
-      background-color: #f0f0f0;
-      color: #aaa;
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    /* ====== SEMANA ASIGNADA ====== */
-    .assigned-week {
-      background-color: #D1D9FF;
-    }
-    .assigned-week .fuera-de-mes {
-      background-color: #D1D9FF;
-      color: #888;
-      opacity: 0.5;
-    }
-
-    /* ====== BOTÓN PRINCIPAL ====== */
-    .primary-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, #5C6BC0 0%, #3949AB 100%);
-      color: #fff;
-      border: none;
-      padding: 0.9rem 1.7rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      margin: 2rem auto 0;
-      outline: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    }
-    .primary-btn:hover {
-      background: linear-gradient(135deg, #303F9F 0%, #283593 100%);
-      transform: translateY(-2px);
-    }
-    .primary-btn:active {
-      transform: translateY(0);
-    }
-
-    /* ====== FOOTER ====== */
-    footer {
-      background-color: #5C6BC0;
-      color: #fff;
-      text-align: center;
-      font-size: 0.9rem;
-      padding: 1rem 1rem;
-    }
-    footer p {
-      margin: 0;
-    }
-
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 768px) {
-      .calendar-header {
-        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
-      #calendar td {
-        height: 80px;
-        font-size: 0.75rem;
+      html, body {
+        height: 100%;
+      }
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #fafafa;
+        color: #333;
+        line-height: 1.5;
+      }
+  
+      /* -------------------------------------------------------
+         HEADER - HERO
+      ------------------------------------------------------- */
+      header {
+        position: relative;
+        width: 100%;
+        min-height: 40vh;
+        max-height: 600px;
+        background: #999dea;
+                    no-repeat center center / cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(30, 33, 63, 0.45);
       }
       header h1 {
-        font-size: 2rem;
+        position: relative;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        color: #fff;
+        z-index: 2;
+        text-align: center;
+        padding: 1rem 2rem;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.4);
       }
-    }
+  
+      /* -------------------------------------------------------
+         MAIN
+      ------------------------------------------------------- */
+      main {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1200px;
+        margin: -3rem auto 2rem; 
+        padding: 0 1rem;
+      }
+  
+      /* -------------------------------------------------------
+         CALENDAR CONTAINER
+      ------------------------------------------------------- */
+      .calendar-container {
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        padding-bottom: 1rem; 
+      }
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #5C6BC0 0%, #3949AB 100%);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .calendar-header #calendar-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: capitalize;
+    letter-spacing: 0.8px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+  }
+  
+  .calendar-header button {
+    background: linear-gradient(135deg, #3949AB 0%, #283593 100%);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .calendar-header button:hover {
+    background: linear-gradient(135deg, #5C6BC0 0%, #3949AB 100%);
+    transform: scale(1.05);
+  }
+  
+  .calendar-header button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+      
+      .calendar-header button {
+        background-color: #3949AB;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1rem;
+        border-radius: 4px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+      .calendar-header button:hover {
+        background-color: #303F9F;
+      }
+  
+      /* -------------------------------------------------------
+         TABLA DEL CALENDARIO
+      ------------------------------------------------------- */
+      #calendar {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed; 
+      }
+      #calendar thead {
+        background-color: #3949AB;
+      }
+      #calendar th {
+        color: #fff;
+        font-weight: normal;
+        padding: 0.8rem;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+      }
+      #calendar tbody tr {
+        transition: background-color 0.3s ease;
+      }
+      #calendar td {
+        height: 100px;
+        vertical-align: top;
+        border: 1px solid #ddd;
+        position: relative;
+        padding: 6px;
+        font-size: 0.85rem;
+      }
+      #calendar td .dia {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+      }
+      #calendar td .nombres {
+        display: block;
+      }
+      #calendar td .nombre {
+        border: 1px solid #b3d1ff;
+        border-radius: 4px;
+        padding: 3px 6px;
+        margin-bottom: 4px;
+        font-size: 0.75rem;
+        text-align: left;
+        transition: background-color 0.3s ease;
+        color: #000;
+        background-color: #fff;
+      }
+      #calendar td .nombre:last-child {
+        margin-bottom: 0;
+      }
+  
+      /* DÍAS FUERA DEL MES (difuminados) */
+      .fuera-de-mes {
+        background-color: #f0f0f0;
+        color: #aaa;
+        opacity: 0.5; 
+        pointer-events: none; 
+      }
+  
+      /* Resaltar semana asignada */
+      .assigned-week {
+        background-color: #D1D9FF; 
+      }
+      .assigned-week .fuera-de-mes {
+        background-color: #D1D9FF;
+        color: #888;
+        opacity: 0.5;
+      }
+  
+      /* -------------------------------------------------------
+         BOTONES PRINCIPALES
+      ------------------------------------------------------- */
+      .primary-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #5C6BC0 0%, #3949AB 100%);
+        color: #fff;
+        border: none;
+        padding: 0.9rem 1.7rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin: 2rem auto 0;
+        outline: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      }
+      .primary-btn:hover {
+        background: linear-gradient(135deg, #303F9F 0%, #283593 100%);
+        transform: translateY(-2px);
+      }
+      .primary-btn:active {
+        transform: translateY(0);
+      }
+  
+      /* -------------------------------------------------------
+         FOOTER
+      ------------------------------------------------------- */
+      footer {
+        background-color: #5C6BC0;
+        color: #fff;
+        text-align: center;
+        font-size: 0.9rem;
+        padding: 1rem 1rem;
+      }
+      footer p {
+        margin: 0;
+      }
+  
+      /* -------------------------------------------------------
+         MODAL DE EDICIÓN
+      ------------------------------------------------------- */
+      .modal {
+        display: none; /* Oculto por defecto */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+        backdrop-filter: blur(2px);
+      }
+  
+      .modal-content {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 12px;
+        margin: 5% auto;
+        padding: 1rem 2rem 2rem;
+        position: relative;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        animation: fadeIn 0.3s forwards;
+      }
+  
+      .modal-header {
+        background-color: #5C6BC0;
+        color: #fff;
+        padding: 0.8rem 1rem;
+        border-radius: 8px 8px 0 0;
+        margin: -1rem -2rem 1rem;
+      }
+      .modal-header h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.3rem;
+        margin: 0;
+      }
+  
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+  
+      .close-modal {
+        position: absolute;
+        right: 1rem;
+        top: 0.9rem;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+      .close-modal:hover {
+        color: #fff;
+      }
+  
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      .form-group select {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+      }
+      #update-week {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.7rem 1.5rem;
+        background-color: #3949AB;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      #update-week:hover {
+        background-color: #303F9F;
+      }
+  
+      /* -------------------------------------------------------
+         DESHABILITAR BOTÓN
+      ------------------------------------------------------- */
+      button:disabled,
+      button[disabled] {
+        background: #ccc;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+      }
