@@ -68,7 +68,7 @@
         { fecha: `${year}-07-16`, nombre: "Virgen del Carmen" },
         { fecha: `${year}-08-15`, nombre: "Asunción de la Virgen" },
         { fecha: `${year}-09-18`, nombre: "Independencia Nacional" },
-        { fecha: `${year}-09-1`, nombre: "Día de las Glorias del Ejército" },
+        { fecha: `${year}-09-19`, nombre: "Día de las Glorias del Ejército" },
         { fecha: `${year}-10-12`, nombre: "Encuentro de Dos Mundos" },
         { fecha: `${year}-10-31`, nombre: "Día de las Iglesias Evangélicas y Protestantes" },
         { fecha: `${year}-11-01`, nombre: "Día de Todos los Santos" },
