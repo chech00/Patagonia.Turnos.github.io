@@ -1,8 +1,4 @@
- /******************************************************
-     * FUNCIONES PARA CALCULAR FERIADOS MÓVILES
-     ******************************************************/
-
-    /**
+ /**
      * Calcula la fecha de Pascua para un año dado utilizando el algoritmo de Anonymous Gregorian.
      * @param {number} year - El año para el cual calcular Pascua.
      * @returns {Date} - La fecha de Pascua.
