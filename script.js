@@ -1,4 +1,8 @@
- /**
+    /******************************************************
+     * FUNCIONES PARA CALCULAR FERIADOS MÓVILES
+     ******************************************************/
+
+    /**
      * Calcula la fecha de Pascua para un año dado utilizando el algoritmo de Anonymous Gregorian.
      * @param {number} year - El año para el cual calcular Pascua.
      * @returns {Date} - La fecha de Pascua.
@@ -67,8 +71,6 @@
         { fecha: `${year}-06-29`, nombre: "San Pedro y San Pablo" },
         { fecha: `${year}-07-16`, nombre: "Virgen del Carmen" },
         { fecha: `${year}-08-15`, nombre: "Asunción de la Virgen" },
-        { fecha: `${year}-09-18`, nombre: "Independencia Nacional" },
-        { fecha: `${year}-09-19`, nombre: "Día de las Glorias del Ejército" },
         { fecha: `${year}-10-12`, nombre: "Encuentro de Dos Mundos" },
         { fecha: `${year}-10-31`, nombre: "Día de las Iglesias Evangélicas y Protestantes" },
         { fecha: `${year}-11-01`, nombre: "Día de Todos los Santos" },
@@ -90,18 +92,24 @@
      * Mapeo de empleados a colores para el calendario 
      */
     const employeeColors = {
-      "Fabián H.":   "#FFB6C1",  // Light Pink
-      "Marco V.":    "#ADD8E6",  // Light Blue
-      "Gonzalo S.":  "#90EE90",  // Light Green
-      "Patricio G.": "#FFD700",  // Gold
-      "Cristian V.": "#D3D3D3"   // Light Gray
+      "Fabián H.":   "#4A90E2",  /* Azul Cielo Suave */
+      "Marco V.":    "#4A90E2",  /* Azul Cielo Suave */
+      "Gonzalo S.":  "#4A90E2",  /* Azul Cielo Suave */
+      "Patricio G.": "#4A90E2",  /* Azul Cielo Suave */
+      "Cristian V.": "#4A90E2"   /* Azul Cielo Suave */
     };
     
     /** 
      * Mapeo de empleados a correo electrónico 
      */
     const employeesEmail = {
-     
+      // Ejemplo:
+      // "Fabián H.": "fabian@example.com",
+      // "Marco V.": "marco@example.com",
+      // "Gonzalo S.": "gonzalo@example.com",
+      // "Patricio G.": "patricio@example.com",
+      // "Cristian V.": "cristian@example.com"
+      // Agrega los correos electrónicos correspondientes
     };
     
     /** 
@@ -128,7 +136,7 @@
     const closeModalBtn = document.querySelector(".close-modal");
     const updateWeekBtn = document.getElementById("update-week");
     const assignTurnsBtn = document.getElementById("assign-turns");
-    
+
     /******************************************************
      * 1. Generar Calendario (Función Corregida y Actualizada)
      ******************************************************/
@@ -239,6 +247,15 @@
 
       // Deshabilitar el botón de editar, ya que no hay semanas asignadas
       openEditBtn.disabled = true;
+
+      // Deshabilitar los botones de vista lineal y calendario según corresponda
+      calendarViewBtn.disabled = true;
+      linearViewBtn.disabled = false;
+
+      // Actualizar la Vista Lineal si está activa
+      if (linearContainer.style.display === "block") {
+        generarVistaLineal();
+      }
     }
 
     /******************************************************
@@ -307,6 +324,11 @@
 
       // Aumentar el contador para la próxima semana
       semanaActual++;
+
+      // Actualizar la Vista Lineal si está activa
+      if (linearContainer.style.display === "block") {
+        generarVistaLineal();
+      }
     }
 
     /******************************************************
@@ -404,6 +426,11 @@
 
       // 7. Mostrar mensaje de confirmación
       showCustomAlert(`La Semana #${lastWeekIndex + 1} se ha actualizado correctamente.`);
+
+      // Actualizar la Vista Lineal si está activa
+      if (linearContainer.style.display === "block") {
+        generarVistaLineal();
+      }
     });
 
     /******************************************************
@@ -431,7 +458,7 @@
      * 6. Manejo de la Modal de Edición
      ******************************************************/
     openEditBtn.addEventListener("click", () => {
-      editModal.style.display = "block"; // Mostrar la modal
+      editModal.style.display = "flex"; // Mostrar la modal
       console.log("Modal abierto.");
     });
 
@@ -454,6 +481,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       generarCalendario(currentMonth, currentYear);
       assignTurnsBtn.addEventListener("click", asignarTurnos);
+      calendarViewBtn.disabled = true; // Deshabilitar por defecto
     });
 
     /******************************************************
@@ -465,7 +493,7 @@
       const closeAlert = document.getElementById("close-alert");
 
       alertMessage.textContent = message;
-      alertModal.style.display = "block";
+      alertModal.style.display = "flex";
 
       closeAlert.onclick = () => {
         alertModal.style.display = "none";
@@ -476,4 +504,83 @@
           alertModal.style.display = "none";
         }
       };
+    }
+
+    /******************************************************
+     * 9. Vista Lineal - Alternar entre Vistas
+     ******************************************************/
+
+    // Referencias a nuevos elementos del DOM
+    const calendarViewBtn = document.getElementById("calendar-view-btn");
+    const linearViewBtn = document.getElementById("linear-view-btn");
+    const calendarContainer = document.querySelector(".calendar-container");
+    const linearContainer = document.getElementById("linear-view");
+    const linearList = document.getElementById("linear-list");
+
+    // Agregar eventos a los botones de vista
+    calendarViewBtn.addEventListener("click", () => {
+      calendarContainer.style.display = "block";
+      linearContainer.style.display = "none";
+      calendarViewBtn.disabled = true;
+      linearViewBtn.disabled = false;
+    });
+
+    linearViewBtn.addEventListener("click", () => {
+      calendarContainer.style.display = "none";
+      linearContainer.style.display = "block";
+      calendarViewBtn.disabled = false;
+      linearViewBtn.disabled = true;
+      generarVistaLineal();
+    });
+
+    // Deshabilitar el botón de Vista de Calendario por defecto al cargar
+    document.addEventListener("DOMContentLoaded", () => {
+      calendarViewBtn.disabled = true;
+    });
+
+    /******************************************************
+     * 10. Generar Vista Lineal
+     ******************************************************/
+
+    function generarVistaLineal() {
+      linearList.innerHTML = ""; // Limpiar la lista existente
+
+      // Iterar sobre las asignaciones manuales
+      Object.keys(asignacionesManual).forEach(semanaIndex => {
+        const asignacion = asignacionesManual[semanaIndex];
+        const fila = document.querySelector(`#calendar tbody tr:nth-child(${parseInt(semanaIndex) + 1})`);
+        
+        // Obtener las fechas de la semana
+        const fechasSemana = [];
+        fila.querySelectorAll("td").forEach(td => {
+          const fechaStr = td.getAttribute("data-fecha");
+          fechasSemana.push(fechaStr);
+        });
+
+        // Formatear las fechas para mostrar
+        const fechaInicio = new Date(fechasSemana[0]);
+        const fechaFin = new Date(fechasSemana[6]);
+
+        const opcionesFecha = { year: 'numeric', month: 'short', day: 'numeric' };
+        const fechaInicioStr = fechaInicio.toLocaleDateString("es-ES", opcionesFecha);
+        const fechaFinStr = fechaFin.toLocaleDateString("es-ES", opcionesFecha);
+
+        // Crear el elemento de lista
+        const listItem = document.createElement("li");
+        listItem.classList.add("linear-item");
+
+        listItem.innerHTML = `
+          <h3>Semana ${parseInt(semanaIndex) + 1}: ${fechaInicioStr} - ${fechaFinStr}</h3>
+          <p><strong>Técnico:</strong> ${asignacion.tecnico}</p>
+          <p><strong>Ingeniero:</strong> ${asignacion.ingeniero}</p>
+          <p><strong>Planta Externa:</strong> ${asignacion.planta}</p>
+        `;
+
+        linearList.appendChild(listItem);
+      });
+
+      // Manejar el caso donde no hay asignaciones
+      if (Object.keys(asignacionesManual).length === 0) {
+        linearList.innerHTML = "<p>No hay turnos asignados para mostrar en la Vista Lineal.</p>";
+      }
     }
