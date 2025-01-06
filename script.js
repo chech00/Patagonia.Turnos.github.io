@@ -7,6 +7,7 @@
      * @param {number} year - El año para el cual calcular Pascua.
      * @returns {Date} - La fecha de Pascua.
      */
+
     function calcularPascua(year) {
       let a = year % 19;
       let b = Math.floor(year / 100);
