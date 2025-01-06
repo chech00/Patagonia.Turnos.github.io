@@ -7,25 +7,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link 
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@400;500&display=swap" 
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Roboto:wght@400;500&display=swap" 
     rel="stylesheet"
   />
-   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
     (function() {
       emailjs.init("o6ghPeq6rF9zLUZKh");
     })();
   </script>
-
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <header>
-        <div class="logo-container">
-          <img src="https://i.ibb.co/HqrX2cr/LOGO-COLOR-2-SLOGAN-768x185.png" alt="Logo de la Empresa" class="logo" />
-        </div>
-        <h1>Calendario de Turnos</h1>
-      </header>
+  <header>
+    <div class="logo-container">
+      <img src="https://i.ibb.co/HqrX2cr/LOGO-COLOR-2-SLOGAN-768x185.png" alt="Logo de la Empresa" class="logo" />
+    </div>
+    <h1>Calendario de Turnos</h1>
+    <div class="empty"></div>
+  </header>
+
   <main>
     <section class="calendar-container">
       <div class="calendar-header">
@@ -48,11 +49,26 @@
         <tbody></tbody>
       </table>
     </section>
+
+    <!-- Vista Lineal -->
+    <section id="linear-view" class="linear-container" style="display: none;">
+      <h2 id="linear-title">Agenda de Turnos</h2>
+      <ul id="linear-list"></ul>
+    </section>
+
+    <!-- Botones para cambiar de vista -->
+    <div style="text-align:center; margin-top: 1rem;">
+      <button id="calendar-view-btn" class="primary-btn">Vista de Calendario</button>
+      <button id="linear-view-btn" class="primary-btn" style="margin-left: 1rem;">Vista Lineal</button>
+    </div>
+
+    <!-- Botones de acción -->
     <div style="text-align:center;">
       <button id="assign-turns" class="primary-btn">Asignar Turnos para la Semana</button>
       <button id="open-edit-modal" class="primary-btn" style="margin-left: 1rem;" disabled>Editar Semanas</button>
     </div>
   </main>
+
   <footer>
     <p>&copy; 2025 Empresa de Telecomunicaciones PatagoniaIP SpA - Todos los derechos reservados.</p>
   </footer>
@@ -89,7 +105,7 @@
   </div>
 
   <!-- Modal de alerta personalizada -->
-  <div id="custom-alert">
+  <div id="custom-alert" class="modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2>Mensaje</h2>
