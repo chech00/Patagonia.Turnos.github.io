@@ -67,9 +67,9 @@
       "Cristian V.": "6346944155"
     };
     const additionalTelegram = {
-      "Carlos B.": "6346944155",
-      "Roberto C.": "6346944155",
-      "Ignacio C.": "6346944155"
+      "Sergio C.": "6346944155",
+      "carolina B.": "6327216375",
+      
     };
 
     const tecnicosRed   = ["Fabián H.", "Marco V."];
