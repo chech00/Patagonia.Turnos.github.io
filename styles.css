@@ -1,4 +1,17 @@
+:root {
+  /* Paleta de colores y variables tipográficas */
+  --color-fondo-principal: #272789;
+  --color-texto-principal: #FFFFFF;
+  --color-fondo-secundario: #F0F0F0;
+  --color-azul-acento: #4A90E2;
+  --color-magenta: #E91E63;
+  --color-oro: #FFD700;
 
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Montserrat', sans-serif;
+
+  --transition-speed: 0.3s;
+}
     :root {
       /* Colores Principales */
       --color-fondo-principal: #272789
