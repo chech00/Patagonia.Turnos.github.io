@@ -542,3 +542,50 @@ RESPONSIVE
     width: 100%;
   }
 }
+/* Estilos específicos para login */
+.login-container {
+  background: var(--color-fondo-secundario);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 300px;
+  margin: auto;
+}
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-family: var(--font-secondary);
+  color: var(--color-azul-acento);
+}
+.login-container label {
+  display: block;
+  margin: 0.5rem 0 0.2rem;
+  font-weight: 600;
+  color: var(--color-azul-acento);
+}
+.login-container input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+.login-container button {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--color-azul-acento);
+  color: var(--color-fondo-principal);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background var(--transition-speed);
+}
+.login-container button:hover {
+  background: var(--color-magenta);
+}
+#error-message {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: red;
+}
