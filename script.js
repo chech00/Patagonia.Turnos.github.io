@@ -60,15 +60,11 @@
       "Cristian V.": "#4A90E2"
     };
     const employeesTelegram = {
-      "Fabián H.": "6346944155",
-      "Marco V.": "6346944155",
-      "Gonzalo S.": "6346944155",
-      "Patricio G.": "6346944155",
-      "Cristian V.": "6346944155"
+
     };
     const additionalTelegram = {
       "Sergio C.": "6346944155",
-      "carolina B.": "6327216375",
+     
       
     };
 
