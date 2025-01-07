@@ -1,12 +1,4 @@
-    /******************************************************
-     * FUNCIONES PARA CALCULAR FERIADOS MÓVILES
-     ******************************************************/
-
-    /**
-     * Calcula la fecha de Pascua para un año dado utilizando el algoritmo de Anonymous Gregorian.
-     * @param {number} year - El año para el cual calcular Pascua.
-     * @returns {Date} - La fecha de Pascua.
-     */
+ // Funciones para calcular feriados móviles
     function calcularPascua(year) {
       let a = year % 19;
       let b = Math.floor(year / 100);
@@ -20,50 +12,28 @@
       let k = c % 4;
       let l = (32 + 2 * e + 2 * i - h - k) % 7;
       let m = Math.floor((a + 11 * h + 22 * l) / 451);
-      let month = Math.floor((h + l - 7 * m + 114) / 31) - 1; // 0 = Enero
+      let month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
       let day = ((h + l - 7 * m + 114) % 31) + 1;
-
       return new Date(year, month, day);
     }
-
-    /**
-     * Obtiene las fechas de Viernes Santo y Sábado Santo para un año dado.
-     * @param {number} year - El año para el cual obtener las fechas.
-     * @returns {Array} - Un arreglo con dos elementos: Viernes Santo y Sábado Santo.
-     */
     function obtenerFeriadosMoviles(year) {
       const pascua = calcularPascua(year);
       const viernesSanto = new Date(pascua);
-      viernesSanto.setDate(pascua.getDate() - 2); // Dos días antes de Pascua
-
+      viernesSanto.setDate(pascua.getDate() - 2);
       const sabadoSanto = new Date(pascua);
-      sabadoSanto.setDate(pascua.getDate() - 1); // Un día antes de Pascua
-
+      sabadoSanto.setDate(pascua.getDate() - 1);
       return [
         { fecha: formatDate(viernesSanto), nombre: "Viernes Santo" },
         { fecha: formatDate(sabadoSanto), nombre: "Sábado Santo" }
       ];
     }
-
-    /**
-     * Formatea una fecha al formato YYYY-MM-DD.
-     * @param {Date} date - La fecha a formatear.
-     * @returns {string} - La fecha en formato YYYY-MM-DD.
-     */
     function formatDate(date) {
       const year = date.getFullYear();
-      const month = (`0${date.getMonth() + 1}`).slice(-2); // Mes en 0-11
+      const month = (`0${date.getMonth() + 1}`).slice(-2);
       const day = (`0${date.getDate()}`).slice(-2);
       return `${year}-${month}-${day}`;
     }
-
-    /**
-     * Genera una lista de feriados para Chile para un año dado.
-     * @param {number} year - El año para el cual generar los feriados.
-     * @returns {Array} - Un arreglo de objetos con `fecha` y `nombre` de cada feriado.
-     */
     function generarFeriados(year) {
-      // Feriados Fijos
       const feriadosFijos = [
         { fecha: `${year}-01-01`, nombre: "Año Nuevo" },
         { fecha: `${year}-05-01`, nombre: "Día del Trabajador" },
@@ -77,58 +47,40 @@
         { fecha: `${year}-12-08`, nombre: "Inmaculada Concepción" },
         { fecha: `${year}-12-25`, nombre: "Navidad" }
       ];
-
-      // Feriados Móviles
       const feriadosMoviles = obtenerFeriadosMoviles(year);
-
-      // Combinar ambos
       return [...feriadosFijos, ...feriadosMoviles];
     }
 
-    /******************************************************
-     * MAPAS Y VARIABLES GLOBALES
-     ******************************************************/
-    /** 
-     * Mapeo de empleados a colores para el calendario 
-     */
+    // Mapas y variables globales
     const employeeColors = {
-      "Fabián H.":   "#4A90E2",  /* Azul Cielo Suave */
-      "Marco V.":    "#4A90E2",  /* Azul Cielo Suave */
-      "Gonzalo S.":  "#4A90E2",  /* Azul Cielo Suave */
-      "Patricio G.": "#4A90E2",  /* Azul Cielo Suave */
-      "Cristian V.": "#4A90E2"   /* Azul Cielo Suave */
+      "Fabián H.":   "#4A90E2",
+      "Marco V.":    "#4A90E2",
+      "Gonzalo S.":  "#4A90E2",
+      "Patricio G.": "#4A90E2",
+      "Cristian V.": "#4A90E2"
     };
-    
-    /** 
-     * Mapeo de empleados a correo electrónico 
-     */
-    const employeesEmail = {
-      // Ejemplo:
-      // "Fabián H.": "fabian@example.com",
-      // "Marco V.": "marco@example.com",
-      // "Gonzalo S.": "gonzalo@example.com",
-      // "Patricio G.": "patricio@example.com",
-      // "Cristian V.": "cristian@example.com"
-      // Agrega los correos electrónicos correspondientes
+    const employeesTelegram = {
+      "Fabián H.": "6346944155",
+      "Marco V.": "6346944155",
+      "Gonzalo S.": "6346944155",
+      "Patricio G.": "6346944155",
+      "Cristian V.": "6346944155"
     };
-    
-    /** 
-     * Listas de empleados para asignar 
-     */
+    const additionalTelegram = {
+      "Carlos B.": "6346944155",
+      "Roberto C.": "6346944155",
+      "Ignacio C.": "6346944155"
+    };
+
     const tecnicosRed   = ["Fabián H.", "Marco V."];
     const ingenieros    = ["Gonzalo S.", "Patricio G."];
     const plantaExterna = ["Cristian V."];
-    
-    /** 
-     * Variables globales para control de calendario 
-     */
+
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
-    let semanaActual = 0; // Rastrea la semana actual a asignar
-    // Objeto para guardar asignaciones: semanaIndex => { tecnico, ingeniero, planta }
+    let semanaActual = 0;
     let asignacionesManual = {};
-    
-    // Referencias a elementos del DOM
+
     const calendarTitle = document.getElementById("calendar-title");
     const calendarBody = document.querySelector("#calendar tbody");
     const openEditBtn = document.getElementById("open-edit-modal");
@@ -136,27 +88,22 @@
     const closeModalBtn = document.querySelector(".close-modal");
     const updateWeekBtn = document.getElementById("update-week");
     const assignTurnsBtn = document.getElementById("assign-turns");
+    const calendarViewBtn = document.getElementById("calendar-view-btn");
+    const linearViewBtn = document.getElementById("linear-view-btn");
+    const calendarContainer = document.querySelector(".calendar-container");
+    const linearContainer = document.getElementById("linear-view");
+    const linearList = document.getElementById("linear-list");
+    const externalArrow = document.getElementById("external-arrow");
 
-    /******************************************************
-     * 1. Generar Calendario (Función Corregida y Actualizada)
-     ******************************************************/
     function generarCalendario(mes, año) {
       calendarBody.innerHTML = "";
-
-      // Generar la lista de feriados para el año actual
       const feriados = generarFeriados(año);
-
       const primerDiaDelMes = new Date(año, mes, 1).getDay();
       const diasEnMes = new Date(año, mes + 1, 0).getDate();
       const diasMesAnterior = new Date(año, mes, 0).getDate();
-
-      // Ajustar para que la semana comience en lunes
       const primerDiaSemana = primerDiaDelMes === 0 ? 7 : primerDiaDelMes;
       const inicioPrimerSemana = 1 - (primerDiaSemana - 1);
-
-      // Fórmula corregida para calcular el total de celdas
       const totalCeldas = Math.ceil((diasEnMes + primerDiaSemana - 1) / 7) * 7;
-
       let diaActual = inicioPrimerSemana;
 
       for (let i = 0; i < totalCeldas; i++) {
@@ -165,11 +112,8 @@
           calendarBody.appendChild(fila);
         }
         const fila = calendarBody.lastChild;
-
         const celda = document.createElement("td");
         celda.classList.add("calendario-celda");
-        
-        // Calcular la fecha real de la celda
         let fecha;
         if (diaActual < 1) {
           const mesAnterior = mes === 0 ? 11 : mes - 1;
@@ -182,96 +126,72 @@
         } else {
           fecha = new Date(año, mes, diaActual);
         }
-
-        // Formato YYYY-MM-DD
         const fechaStr = formatDate(fecha);
-
-        // Verificar si la fecha es feriado
         const feriado = feriados.find(f => f.fecha === fechaStr);
-
-        // Asignar data-fecha en formato YYYY-MM-DD
         celda.setAttribute('data-fecha', fechaStr);
 
-        // Contenido de la celda
         if (diaActual < 1) {
           celda.innerHTML = `
-              <div class="dia">${diasMesAnterior + diaActual}</div>
-              <div class="nombres">
-                  <div class="nombre"></div>
-                  <div class="nombre"></div>
-                  <div class="nombre"></div>
-              </div>`;
+            <div class="dia">${diasMesAnterior + diaActual}</div>
+            <div class="nombres">
+              <div class="nombre"></div>
+              <div class="nombre"></div>
+              <div class="nombre"></div>
+            </div>`;
           celda.classList.add("fuera-de-mes");
         } else if (diaActual > diasEnMes) {
           celda.innerHTML = `
-              <div class="dia">${diaActual - diasEnMes}</div>
-              <div class="nombres">
-                  <div class="nombre"></div>
-                  <div class="nombre"></div>
-                  <div class="nombre"></div>
-              </div>`;
+            <div class="dia">${diaActual - diasEnMes}</div>
+            <div class="nombres">
+              <div class="nombre"></div>
+              <div class="nombre"></div>
+              <div class="nombre"></div>
+            </div>`;
           celda.classList.add("fuera-de-mes");
         } else {
           if (feriado) {
             celda.classList.add("feriado");
             celda.innerHTML = `
-                <div class="dia">${diaActual}</div>
-                <div class="feriado-nombre">${feriado.nombre}</div>
-                <div class="nombres">
-                    <div class="nombre"></div>
-                    <div class="nombre"></div>
-                    <div class="nombre"></div>
-                </div>`;
+              <div class="dia">${diaActual}</div>
+              <div class="feriado-nombre">${feriado.nombre}</div>
+              <div class="nombres">
+                <div class="nombre"></div>
+                <div class="nombre"></div>
+                <div class="nombre"></div>
+              </div>`;
           } else {
             celda.innerHTML = `
-                <div class="dia">${diaActual}</div>
-                <div class="nombres">
-                    <div class="nombre"></div>
-                    <div class="nombre"></div>
-                    <div class="nombre"></div>
-                </div>`;
+              <div class="dia">${diaActual}</div>
+              <div class="nombres">
+                <div class="nombre"></div>
+                <div class="nombre"></div>
+                <div class="nombre"></div>
+              </div>`;
           }
         }
-
         fila.appendChild(celda);
         diaActual++;
       }
-
-      // Título del calendario
       calendarTitle.textContent =
-          `${new Intl.DateTimeFormat("es-ES", { month: "long" }).format(new Date(año, mes))} ${año}`;
-
-      // Resetear "semanaActual" y "asignacionesManual" para el nuevo mes
+        `${new Intl.DateTimeFormat("es-ES", { month: "long" }).format(new Date(año, mes))} ${año}`;
       semanaActual = 0;
       asignacionesManual = {};
-
-      // Deshabilitar el botón de editar, ya que no hay semanas asignadas
       openEditBtn.disabled = true;
-
-      // Deshabilitar los botones de vista lineal y calendario según corresponda
       calendarViewBtn.disabled = true;
       linearViewBtn.disabled = false;
-
-      // Actualizar la Vista Lineal si está activa
       if (linearContainer.style.display === "block") {
         generarVistaLineal();
       }
+      resaltarSemanaActual();
     }
 
-    /******************************************************
-     * 2. Asignar Turnos (semana por semana)
-     ******************************************************/
     function asignarTurnos() {
       console.log("Asignando semana #", semanaActual);
-
       const filas = document.querySelectorAll("#calendar tbody tr");
-      
       if (semanaActual >= filas.length) {
         showCustomAlert("No hay más semanas disponibles en este mes.");
         return;
       }
-
-      // Limpiar las celdas de semanas anteriores
       filas.forEach((fila, index) => {
         if (index !== semanaActual) {
           const nombresDivs = fila.querySelectorAll(".nombre");
@@ -282,15 +202,11 @@
           fila.classList.remove("assigned-week");
         }
       });
-
-      // Asignar turnos a la semanaActual
       const tecnico = tecnicosRed[semanaActual % tecnicosRed.length];
       const ingeniero = ingenieros[semanaActual % ingenieros.length];
       const planta = plantaExterna[0]; 
-
       const fila = filas[semanaActual];
       const dias = fila.querySelectorAll("td");
-
       dias.forEach((dia) => {
         const nombresDiv = dia.querySelectorAll(".nombre");
         if (nombresDiv.length === 3) {
@@ -302,79 +218,94 @@
           nombresDiv[2].style.backgroundColor = employeeColors[planta] || "#FFFFFF";
         }
       });
-
-      // Marcar la semana como asignada
       fila.classList.add("assigned-week");
-
-      // Guardar la asignación en nuestro objeto
-      asignacionesManual[semanaActual] = {
-        tecnico,
-        ingeniero,
-        planta
-      };
-
+      asignacionesManual[semanaActual] = { tecnico, ingeniero, planta };
       console.log("Semana asignada:", semanaActual, asignacionesManual);
-
-      // Habilitar el botón "Editar Semanas", ya que hay al menos 1 semana asignada
       openEditBtn.disabled = false;
-
-      // 3. Enviar correo a los seleccionados de la semana
-      const turnosSemana = asignacionesManual[semanaActual];
-      sendEmailNotification(turnosSemana);
-
-      // Aumentar el contador para la próxima semana
+      sendEmailNotification({ tecnico, ingeniero, planta });
       semanaActual++;
-
-      // Actualizar la Vista Lineal si está activa
+      resaltarSemanaActual();
       if (linearContainer.style.display === "block") {
         generarVistaLineal();
       }
     }
 
-    /******************************************************
-     * 3. FUNCION PARA ENVIAR CORREO CON EMAILJS
-     ******************************************************/
     function sendEmailNotification(turnosSemana) {
-      // 1. Obtener correos de cada rol usando el objeto employeesEmail
-      const tecnicoEmail   = employeesEmail[turnosSemana.tecnico];
-      const ingenieroEmail = employeesEmail[turnosSemana.ingeniero];
-      const plantaEmail    = employeesEmail[turnosSemana.planta];
+      // Se han eliminado las funcionalidades de envío de correo.
+      
+      // Notificaciones de Telegram a los asignados
+      const messageTecnico = `Hola ${turnosSemana.tecnico}, se te ha asignado el turno de esta semana.\n` +
+                             `Ingeniero: ${turnosSemana.ingeniero}\n` +
+                             `Planta: ${turnosSemana.planta}`;
 
-      // 2. Combinar correos en un solo string (separados por comas)
-      const toEmails = [tecnicoEmail, ingenieroEmail, plantaEmail].join(", ");
+      sendTelegramNotification(turnosSemana.tecnico, messageTecnico);
+      sendTelegramNotification(turnosSemana.ingeniero, `Hola ${turnosSemana.ingeniero}, se te ha asignado el turno de esta semana.`);
+      sendTelegramNotification(turnosSemana.planta, `Hola ${turnosSemana.planta}, se te ha asignado el turno de esta semana.`);
 
-      // 3. Construir el objeto con los datos que necesita EmailJS
-      const templateParams = {
-        to_email:   toEmails,
-        tecnico:    turnosSemana.tecnico,
-        ingeniero:  turnosSemana.ingeniero,
-        planta:     turnosSemana.planta
-        // Puedes agregar más campos si tu template los requiere
-      };
-
-      // 4. Realizar el envío
-      emailjs.send(
-        "service_6g9q7ps",    // Reemplaza con tu Service ID
-        "template_xtz4n5f",   // Reemplaza con tu Template ID
-        templateParams
-      )
-      .then(function(response) {
-        console.log("Correo enviado con éxito!", response.status, response.text);
-        showCustomAlert("El correo fue enviado correctamente a los asignados.");
-      })
-      .catch(function(error) {
-        console.error("Error al enviar correo:", error);
-        showCustomAlert("Ocurrió un error al enviar el correo. Intenta nuevamente.");
+      // Enviar notificaciones de Telegram a destinatarios adicionales
+      Object.keys(additionalTelegram).forEach(nombre => {
+        const chatId = additionalTelegram[nombre];
+        const mensajeAdicional = `Los encargados del turno de la semana actual son:\n` +
+                                 `Técnico: ${turnosSemana.tecnico}\n` +
+                                 `Ingeniero: ${turnosSemana.ingeniero}\n` +
+                                 `Planta: ${turnosSemana.planta}`;
+        sendTelegramNotificationConChatId(chatId, mensajeAdicional);
       });
     }
 
-    /******************************************************
-     * 4. Botón "Actualizar Semana" (Edición Manual)
-     ******************************************************/
+    function sendTelegramNotification(employeeName, message) {
+      const botToken = "7783582845:AAHWX4551HSQcDHRU_54r7DgJGKY9WB-I6g";
+      const chatId = employeesTelegram[employeeName];
+      if (!chatId) {
+        console.error(`No se encontró chat ID para ${employeeName}`);
+        return;
+      }
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+      const params = {
+        chat_id: chatId,
+        text: message
+      };
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(params)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(`Mensaje de Telegram enviado a ${employeeName}:`, data);
+      })
+      .catch(error => {
+        console.error(`Error al enviar mensaje a ${employeeName}:`, error);
+      });
+    }
+
+    function sendTelegramNotificationConChatId(chatId, message) {
+      const botToken = "7783582845:AAHWX4551HSQcDHRU_54r7DgJGKY9WB-I6g";
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+      const params = {
+        chat_id: chatId,
+        text: message
+      };
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(params)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(`Mensaje de Telegram enviado al chat ${chatId}:`, data);
+      })
+      .catch(error => {
+        console.error(`Error al enviar mensaje al chat ${chatId}:`, error);
+      });
+    }
+
     updateWeekBtn.addEventListener("click", () => {
       console.log("Clic en Actualizar Semana.");
-
-      // 1. Encontrar la última semana asignada
       const assignedWeeks = Object.keys(asignacionesManual); 
       if (assignedWeeks.length === 0) {
         showCustomAlert("No hay semanas asignadas.");
@@ -382,22 +313,16 @@
       }
       const lastWeekIndexString = assignedWeeks[assignedWeeks.length - 1];
       const lastWeekIndex = parseInt(lastWeekIndexString, 10);
-
-      // 2. Tomar los nuevos valores del modal
       const nuevoTecnico = document.getElementById("edit-tecnico").value;
       const nuevoIngeniero = document.getElementById("edit-ingeniero").value;
       const nuevaPlanta = document.getElementById("edit-planta").value;
-
-      // 3. Editar las celdas de esa semana
       const filas = document.querySelectorAll("#calendar tbody tr");
       if (lastWeekIndex < 0 || lastWeekIndex >= filas.length) {
         showCustomAlert("Semana inválida.");
         return;
       }
-
       const fila = filas[lastWeekIndex];
       const dias = fila.querySelectorAll("td");
-
       dias.forEach((dia) => {
         const nombresDiv = dia.querySelectorAll(".nombre");
         if (nombresDiv.length === 3) {
@@ -409,33 +334,36 @@
           nombresDiv[2].style.backgroundColor = employeeColors[nuevaPlanta] || "#FFFFFF";
         }
       });
-
-      // 4. Actualizar en el objeto de asignaciones
       asignacionesManual[lastWeekIndex] = {
         tecnico: nuevoTecnico,
         ingeniero: nuevoIngeniero,
         planta: nuevaPlanta
       };
-
-      // 5. Asegurar que la fila se marque como "assigned-week"
       fila.classList.add("assigned-week");
-
-      // 6. Cerrar la modal
       editModal.style.display = "none";
       console.log("Modal cerrado.");
-
-      // 7. Mostrar mensaje de confirmación
       showCustomAlert(`La Semana #${lastWeekIndex + 1} se ha actualizado correctamente.`);
-
-      // Actualizar la Vista Lineal si está activa
+      resaltarSemanaActual();
       if (linearContainer.style.display === "block") {
         generarVistaLineal();
       }
+
+      // Enviar notificación por Telegram informando del cambio
+      const mensajeCambio = `Se ha actualizado la Semana #${lastWeekIndex + 1}.\n` +
+                            `Nuevo Técnico: ${nuevoTecnico}\n` +
+                            `Nuevo Ingeniero: ${nuevoIngeniero}\n` +
+                            `Nueva Planta: ${nuevaPlanta}`;
+      
+      sendTelegramNotification(nuevoTecnico, mensajeCambio);
+      sendTelegramNotification(nuevoIngeniero, mensajeCambio);
+      sendTelegramNotification(nuevaPlanta, mensajeCambio);
+
+      Object.keys(additionalTelegram).forEach(nombre => {
+        const chatId = additionalTelegram[nombre];
+        sendTelegramNotificationConChatId(chatId, mensajeCambio);
+      });
     });
 
-    /******************************************************
-     * 5. Navegación de meses (Anterior / Siguiente)
-     ******************************************************/
     document.getElementById("prev-month").addEventListener("click", () => {
       currentMonth--;
       if (currentMonth < 0) {
@@ -454,51 +382,34 @@
       generarCalendario(currentMonth, currentYear);
     });
 
-    /******************************************************
-     * 6. Manejo de la Modal de Edición
-     ******************************************************/
     openEditBtn.addEventListener("click", () => {
-      editModal.style.display = "flex"; // Mostrar la modal
-      console.log("Modal abierto.");
+      editModal.style.display = "flex";
     });
-
     closeModalBtn.addEventListener("click", () => {
-      editModal.style.display = "none"; // Cerrar la modal
-      console.log("Modal cerrado por botón X.");
+      editModal.style.display = "none";
     });
-
-    // Cerrar modal si se hace clic en el fondo oscuro
     window.addEventListener("click", (event) => {
       if (event.target === editModal) {
         editModal.style.display = "none";
-        console.log("Modal cerrado por clic fuera del contenedor.");
       }
     });
 
-    /******************************************************
-     * 7. INIT - Al Cargar la Página
-     ******************************************************/
     document.addEventListener("DOMContentLoaded", () => {
       generarCalendario(currentMonth, currentYear);
       assignTurnsBtn.addEventListener("click", asignarTurnos);
-      calendarViewBtn.disabled = true; // Deshabilitar por defecto
+      calendarViewBtn.disabled = true;
+      inicializarAutomatizacion();
     });
 
-    /******************************************************
-     * 8. Alerta Personalizada
-     ******************************************************/
     function showCustomAlert(message) {
       const alertModal = document.getElementById("custom-alert");
       const alertMessage = document.getElementById("alert-message");
       const closeAlert = document.getElementById("close-alert");
-
       alertMessage.textContent = message;
       alertModal.style.display = "flex";
-
       closeAlert.onclick = () => {
         alertModal.style.display = "none";
       };
-
       window.onclick = (event) => {
         if (event.target === alertModal) {
           alertModal.style.display = "none";
@@ -506,18 +417,6 @@
       };
     }
 
-    /******************************************************
-     * 9. Vista Lineal - Alternar entre Vistas
-     ******************************************************/
-
-    // Referencias a nuevos elementos del DOM
-    const calendarViewBtn = document.getElementById("calendar-view-btn");
-    const linearViewBtn = document.getElementById("linear-view-btn");
-    const calendarContainer = document.querySelector(".calendar-container");
-    const linearContainer = document.getElementById("linear-view");
-    const linearList = document.getElementById("linear-list");
-
-    // Agregar eventos a los botones de vista
     calendarViewBtn.addEventListener("click", () => {
       calendarContainer.style.display = "block";
       linearContainer.style.display = "none";
@@ -533,54 +432,101 @@
       generarVistaLineal();
     });
 
-    // Deshabilitar el botón de Vista de Calendario por defecto al cargar
     document.addEventListener("DOMContentLoaded", () => {
       calendarViewBtn.disabled = true;
     });
 
-    /******************************************************
-     * 10. Generar Vista Lineal
-     ******************************************************/
-
     function generarVistaLineal() {
-      linearList.innerHTML = ""; // Limpiar la lista existente
-
-      // Iterar sobre las asignaciones manuales
+      linearList.innerHTML = "";
       Object.keys(asignacionesManual).forEach(semanaIndex => {
         const asignacion = asignacionesManual[semanaIndex];
         const fila = document.querySelector(`#calendar tbody tr:nth-child(${parseInt(semanaIndex) + 1})`);
-        
-        // Obtener las fechas de la semana
         const fechasSemana = [];
         fila.querySelectorAll("td").forEach(td => {
           const fechaStr = td.getAttribute("data-fecha");
           fechasSemana.push(fechaStr);
         });
-
-        // Formatear las fechas para mostrar
         const fechaInicio = new Date(fechasSemana[0]);
         const fechaFin = new Date(fechasSemana[6]);
-
         const opcionesFecha = { year: 'numeric', month: 'short', day: 'numeric' };
         const fechaInicioStr = fechaInicio.toLocaleDateString("es-ES", opcionesFecha);
         const fechaFinStr = fechaFin.toLocaleDateString("es-ES", opcionesFecha);
-
-        // Crear el elemento de lista
         const listItem = document.createElement("li");
         listItem.classList.add("linear-item");
-
         listItem.innerHTML = `
           <h3>Semana ${parseInt(semanaIndex) + 1}: ${fechaInicioStr} - ${fechaFinStr}</h3>
           <p><strong>Técnico:</strong> ${asignacion.tecnico}</p>
           <p><strong>Ingeniero:</strong> ${asignacion.ingeniero}</p>
           <p><strong>Planta Externa:</strong> ${asignacion.planta}</p>
         `;
-
         linearList.appendChild(listItem);
       });
-
-      // Manejar el caso donde no hay asignaciones
       if (Object.keys(asignacionesManual).length === 0) {
         linearList.innerHTML = "<p>No hay turnos asignados para mostrar en la Vista Lineal.</p>";
       }
+    }
+
+    function obtenerSemanaActual() {
+      const hoy = new Date();
+      const mes = hoy.getMonth();
+      const año = hoy.getFullYear();
+      const primerDiaDelMes = new Date(año, mes, 1);
+      const diaSemanaPrimerDia = primerDiaDelMes.getDay() === 0 ? 7 : primerDiaDelMes.getDay();
+      const diaDelMes = hoy.getDate();
+      return Math.floor((diaDelMes + diaSemanaPrimerDia - 2) / 7);
+    }
+
+    function resaltarSemanaActual() {
+      const semanaActualIndex = obtenerSemanaActual();
+      const filas = document.querySelectorAll("#calendar tbody tr");
+      filas.forEach((fila, index) => {
+        if (index === semanaActualIndex) {
+          const celdaLunes = fila.querySelector("td");
+          if (celdaLunes) {
+            const diaDiv = celdaLunes.querySelector(".dia");
+            if (diaDiv) {
+              const filaRect = fila.getBoundingClientRect();
+              const containerRect = calendarContainer.getBoundingClientRect();
+              const topPosition = filaRect.top - containerRect.top + (filaRect.height / 2) - 10;
+              externalArrow.style.top = `${topPosition}px`;
+              externalArrow.style.display = "block";
+            }
+          }
+        } else {
+          externalArrow.style.display = "none";
+        }
+      });
+    }
+
+    function asignacionAutomaticaTurnos() {
+      const hoy = new Date();
+      const dia = hoy.getDay();
+      const hora = hoy.getHours();
+      const minutos = hoy.getMinutes();
+      if (dia === 1 && hora === 7 && minutos === 0) {
+        const semanaIndex = obtenerSemanaActual();
+        if (!asignacionesManual.hasOwnProperty(semanaIndex)) {
+          semanaActual = semanaIndex;
+          asignarTurnos();
+          console.log("Asignación automática de turnos para la semana:", semanaIndex + 1);
+        }
+      }
+    }
+
+    function inicializarAutomatizacion() {
+      resaltarSemanaActual();
+      setInterval(asignacionAutomaticaTurnos, 60000);
+      const hoy = new Date();
+      const dia = hoy.getDay();
+      const hora = hoy.getHours();
+      if (dia === 1 && hora >= 7) {
+        const semanaIndex = obtenerSemanaActual();
+        if (!asignacionesManual.hasOwnProperty(semanaIndex)) {
+          semanaActual = semanaIndex;
+          asignarTurnos();
+          console.log("Asignación automática de turnos al cargar la página para la semana:", semanaIndex + 1);
+        }
+      }
+      const observer = new MutationObserver(resaltarSemanaActual);
+      observer.observe(calendarBody, { childList: true, subtree: true });
     }
