@@ -1,22 +1,21 @@
-
     :root {
-      /* Colores Principales */
-      --color-fondo-principal: #272789
-        ;     /* Azul Marino Profundo */
-      --color-texto-principal: #FFFFFF;    /* Blanco Puro */
-      --color-fondo-secundario: #F0F0F0;    /* Gris Claro */
-      --color-azul-acento: #4A90E2;        /* Azul Cielo Suave */
-      --color-magenta: #E91E63;            /* Magenta */
-      --color-oro: #FFD700;                /* Oro */
-    
-      /* Tipografías */
-      --font-primary: 'Roboto', sans-serif;
-      --font-secondary: 'Montserrat', sans-serif;
-    
-      /* Transiciones */
-      --transition-speed: 0.3s;
-    }
-    
+  /* Paleta Inspirada en Starlink */
+  --color-fondo-principal: #0B0C10;      /* Fondo negro profundo similar al de Starlink */
+  --color-texto-principal: #C5C6C7;      /* Gris muy claro para textos, casi blanco */
+  --color-fondo-secundario: #1F2833;     /* Gris oscuro para elementos secundarios */
+  --color-azul-acento: #1f8981;          /* Tonos cian/neón para acentos y hover */
+  --color-magenta: #45A29E;              /* Tono ligeramente más oscuro para transiciones */
+  --color-oro: #C5C6C7;                  /* Gris claro para resaltar eventos especiales */
+
+  /* Tipografías */
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Montserrat', sans-serif;
+
+  /* Transiciones */
+  --transition-speed: 0.3s;
+}
+
+
     /* -------------------------------------------------------
     RESET E INICIALIZACIÓN BÁSICA
     ------------------------------------------------------- */
@@ -57,10 +56,11 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
-    header img.logo {
-      width: 180px;
-      height: auto;
-    }
+  header img.logo {
+  width: 180px;
+  height: auto;
+  filter: brightness(2.0); /* Aumenta el brillo un 20% */
+}
     
     header h1 {
       position: absolute;
@@ -549,29 +549,14 @@
         display: none;
       }
     }
-    
-    /* -------------------------------------------------------
-    ESTILOS PARA LA FLECHA ROJA EXTERNA
-    ------------------------------------------------------- */
     .external-arrow {
       position: absolute;
-      left: -30px; /* Ajusta según sea necesario */
-      width: 0; 
-      height: 0; 
+      left: -20px; /* Ajusta según tu diseño */
+      width: 0;
+      height: 0;
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
-      border-right: 10px solid red; /* Flecha hacia la derecha */
-      display: none; /* Se muestra solo cuando se asigna la semana actual */
-      z-index: 10;
-    }
-    
-    /* Posicionamiento de la flecha */
-    .calendar-container .current-week-arrow {
-      display: none; /* Ocultar cualquier flecha interna */
-    }
-
-
-      text-align: center;
-      margin-top: 0.5rem;
-      color: red;
+      border-right: 10px solid red; /* Color y forma de la flecha */
+      display: none; /* Inicialmente oculta */
+      z-index: 10;  /* Asegura que esté por encima de otros elementos */
     }
