@@ -1,20 +1,29 @@
-    :root {
-  /* Paleta Inspirada en Starlink */
-  --color-fondo-principal: #0B0C10;      /* Fondo negro profundo similar al de Starlink */
-  --color-texto-principal: #C5C6C7;      /* Gris muy claro para textos, casi blanco */
-  --color-fondo-secundario: #1F2833;     /* Gris oscuro para elementos secundarios */
-  --color-azul-acento: #1f8981;          /* Tonos cian/neón para acentos y hover */
-  --color-magenta: #45A29E;              /* Tono ligeramente más oscuro para transiciones */
-  --color-oro: #C5C6C7;                  /* Gris claro para resaltar eventos especiales */
-
-  /* Tipografías */
+:root {
+  /* Paleta inspirada en YouTube Modo Oscuro */
+  --color-fondo-principal: #181818;       /* Fondo casi negro similar al modo oscuro de YouTube */
+  --color-fondo-secundario: #202020;      /* Tonos ligeramente más claros para secciones internas */
+  --color-texto-principal: #e5e5e5;       /* Texto claro para contraste en fondo oscuro */
+  --color-texto-secundario: #aaaaaa;      /* Texto secundario en gris claro */
+  --color-acento-primario: #0b444a;       /* Rojo distintivo de YouTube para elementos destacados */
+  --color-acento-secundario: #303030;     /* Gris oscuro para bordes, fondos secundarios u otros acentos */
+  --color-error: #ff5252;                 /* Rojo brillante para errores */
+  --color-exito: #4caf50;                 /* Verde para mensajes de éxito */
+  --color-advertencia: #ffb300;           /* Amarillo-anaranjado para advertencias */
+  
   --font-primary: 'Roboto', sans-serif;
   --font-secondary: 'Montserrat', sans-serif;
-
-  /* Transiciones */
   --transition-speed: 0.3s;
 }
 
+
+    /* Estilo para agrupar botones */
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
 
     /* -------------------------------------------------------
     RESET E INICIALIZACIÓN BÁSICA
@@ -28,10 +37,8 @@
       height: 100%;
     }
     body {
-      font-family: var(--font-primary);
-      background-color: var(--color-fondo-principal);
-      color: var(--color-texto-principal);
-      line-height: 1.6;
+     background-color: var(--color-fondo-principal);
+  color: var(--color-texto-principal);
     }
     a {
       text-decoration: none;
@@ -40,6 +47,13 @@
     button {
       font-family: var(--font-primary);
     }
+    .boton-principal {
+  background-color: var(--color-acento-primario);
+  color: var(--color-fondo-principal);
+}
+    .header, .footer {
+  background-color: var(--color-fondo-secundario);
+}
     
     /* -------------------------------------------------------
     HEADER - HERO
@@ -51,16 +65,16 @@
       position: relative;
       min-height: 20vh;
       padding: 1.5rem 3rem;
-      background: var(--color-fondo-principal);
+      background: var(--color-fondo-secundario);
       color: var(--color-texto-principal);
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
-  header img.logo {
-  width: 180px;
-  height: auto;
-  filter: brightness(2.0); /* Aumenta el brillo un 20% */
-}
+    header img.logo {
+      width: 180px;
+      height: auto;
+      filter: brightness(2.0);
+    }
     
     header h1 {
       position: absolute;
@@ -70,7 +84,7 @@
       font-size: 2rem;
       font-weight: 600;
       color: var(--color-texto-principal);
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     
     .empty {
@@ -91,7 +105,7 @@
     CALENDAR CONTAINER
     ------------------------------------------------------- */
     .calendar-container {
-      position: relative; /* Para posicionar la flecha roja */
+      position: relative;
       background: var(--color-fondo-secundario);
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -104,8 +118,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(135deg, var(--color-azul-acento) 0%, var(--color-fondo-principal) 100%);
-      color: var(--color-texto-principal);
+      background: linear-gradient(135deg, var(--color-acento-primario) 0%, var(--color-fondo-secundario) 100%);
+      color: var(--color-fondo-principal);
       padding: 1rem 1.5rem;
       border-radius: 8px;
       margin-bottom: 1rem;
@@ -121,7 +135,7 @@
     }
     
     .calendar-header button {
-      background: var(--color-azul-acento);
+      background: var(--color-acento-primario);
       color: var(--color-fondo-principal);
       border: none;
       padding: 0.6rem 1.2rem;
@@ -133,7 +147,7 @@
     }
     
     .calendar-header button:hover {
-      background: var(--color-magenta);
+      background: var(--color-acento-secundario);
       transform: translateY(-2px);
     }
     
@@ -141,7 +155,6 @@
       transform: translateY(0);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
     /* -------------------------------------------------------
     TABLA DEL CALENDARIO
     ------------------------------------------------------- */
@@ -152,7 +165,7 @@
     }
     
     #calendar thead {
-      background-color: var(--color-azul-acento);
+      background-color: var(--color-acento-primario);
     }
     
     #calendar th {
@@ -170,23 +183,24 @@
     #calendar td {
       height: 100px;
       vertical-align: top;
-      border: 1px solid #ccc;
+      border: 1px solid #e0e0e0;
       position: relative;
       padding: 8px;
       font-size: 0.85rem;
+      background-color: #fafafa;
     }
     
     #calendar td .dia {
       font-family: var(--font-secondary);
       font-weight: 600;
-      color: var(--color-azul-acento);
+      color: var(--color-acento-primario);
       margin-bottom: 6px;
       position: relative;
     }
     
     #calendar td .feriado-nombre {
       font-size: 0.7rem;
-      color: var(--color-oro);
+      color: var(--color-exito);
       margin-top: 4px;
     }
     
@@ -198,7 +212,7 @@
     }
     
     #calendar td .nombre {
-      background-color: var(--color-azul-acento);
+      background-color: var(--color-acento-primario);
       border-radius: 4px;
       padding: 2px 6px;
       font-size: 0.75rem;
@@ -207,23 +221,23 @@
     }
     
     #calendar td .nombre:hover {
-      background-color: var(--color-magenta);
+      background-color: var(--color-acento-secundario);
       color: var(--color-texto-principal);
     }
     
     .fuera-de-mes {
-      background-color: #1E1E1E;
-      color: #aaa;
+      background-color: #E0E0E0;
+      color: #9E9E9E;
       opacity: 0.7;
     }
     
     .feriado {
-      background-color: var(--color-oro);
-      color: #000;
+      background-color: var(--color-exito);
+      color: #FFFFFF;
     }
     
     .assigned-week {
-      background-color: rgba(74, 144, 226, 0.1); /* Azul Cielo Suave */
+      background-color: rgba(98, 0, 238, 0.1); /* Índigo claro */
     }
     
     /* -------------------------------------------------------
@@ -231,7 +245,7 @@
     ------------------------------------------------------- */
     .primary-btn {
       display: inline-block;
-      background: var(--color-azul-acento);
+      background: var(--color-acento-primario);
       color: var(--color-fondo-principal);
       border: none;
       padding: 0.8rem 1.5rem;
@@ -239,12 +253,11 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background var(--transition-speed), transform var(--transition-speed);
-      margin: 1rem 0;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
     .primary-btn:hover {
-      background: var(--color-magenta);
+      background: var(--color-acento-secundario);
       transform: translateY(-2px);
     }
     
@@ -254,19 +267,19 @@
     }
     
     button:disabled, button[disabled] {
-      background: #555;
+      background: #BDBDBD;
       cursor: not-allowed;
       box-shadow: none;
       transform: none;
-      color: #ccc;
+      color: #FFFFFF;
     }
     
     /* -------------------------------------------------------
     FOOTER
     ------------------------------------------------------- */
     footer {
-      background-color: var(--color-fondo-principal);
-      color: var(--color-texto-principal);
+      background-color: var(--color-fondo-secundario);
+      color: var(--color-texto-secundario);
       text-align: center;
       font-size: 0.9rem;
       padding: 1rem 1.5rem;
@@ -295,7 +308,7 @@
     }
     
     .modal-content {
-      background: var(--color-texto-principal);
+      background: var(--color-fondo-principal);
       border-radius: 12px;
       padding: 2rem;
       max-width: 500px;
@@ -305,7 +318,7 @@
     }
     
     .modal-header {
-      background: var(--color-azul-acento);
+      background: var(--color-acento-primario);
       color: var(--color-fondo-principal);
       padding: 1rem;
       font-family: var(--font-secondary);
@@ -328,7 +341,7 @@
       right: 1.5rem;
       font-size: 1.5rem;
       font-weight: bold;
-      color: #ccc;
+      color: #FFFFFF;
       cursor: pointer;
       transition: color var(--transition-speed);
     }
@@ -345,28 +358,30 @@
     
     .form-group label {
       font-weight: 600;
-      color: var(--color-azul-acento);
+      color: var(--color-acento-primario);
       margin-bottom: 0.5rem;
     }
     
-    .form-group select {
+    .form-group select,
+    .form-group input {
       padding: 0.8rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid #BDBDBD;
       border-radius: 8px;
       outline: none;
       background: var(--color-fondo-secundario);
-      color: var(--color-fondo-principal);
+      color: var(--color-texto-principal);
       transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
     }
     
-    .form-group select:focus {
-      border-color: var(--color-azul-acento);
-      box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+    .form-group select:focus,
+    .form-group input:focus {
+      border-color: var(--color-acento-primario);
+      box-shadow: 0 0 5px rgba(98, 0, 238, 0.5);
     }
     
     #update-week {
-      background: var(--color-azul-acento);
+      background: var(--color-acento-primario);
       color: var(--color-fondo-principal);
       border: none;
       padding: 0.8rem 1.5rem;
@@ -378,23 +393,12 @@
     }
     
     #update-week:hover {
-      background: var(--color-magenta);
+      background: var(--color-acento-secundario);
       transform: translateY(-2px);
     }
     
     #update-week:active {
       transform: translateY(0);
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
     
     /* -------------------------------------------------------
@@ -415,7 +419,7 @@
     }
     
     #custom-alert .modal-content {
-      background: var(--color-texto-principal);
+      background: var(--color-fondo-principal);
       border-radius: 12px;
       padding: 2rem;
       max-width: 400px;
@@ -425,7 +429,7 @@
     }
     
     #custom-alert .modal-header {
-      background: var(--color-azul-acento);
+      background: var(--color-acento-primario);
       color: var(--color-fondo-principal);
       padding: 1rem;
       font-family: var(--font-secondary);
@@ -441,11 +445,11 @@
     #custom-alert p {
       margin: 1.5rem 0;
       font-size: 1rem;
-      color: var(--color-fondo-principal);
+      color: var(--color-texto-principal);
     }
     
     #custom-alert #close-alert {
-      background: var(--color-azul-acento);
+      background: var(--color-acento-primario);
       color: var(--color-fondo-principal);
       border: none;
       padding: 0.8rem 1.5rem;
@@ -455,7 +459,7 @@
     }
     
     #custom-alert #close-alert:hover {
-      background: var(--color-magenta);
+      background: var(--color-acento-secundario);
     }
     
     /* -------------------------------------------------------
@@ -473,7 +477,7 @@
     #linear-title {
       font-family: var(--font-secondary);
       font-size: 1.6rem;
-      color: var(--color-azul-acento);
+      color: var(--color-acento-primario);
       margin-bottom: 1rem;
       text-align: center;
     }
@@ -483,28 +487,29 @@
     }
     
     .linear-item {
-      background-color: var(--color-azul-acento);
-      border-left: 5px solid var(--color-oro);
+      background-color: var(--color-acento-primario);
+      border-left: 5px solid var(--color-exito);
       padding: 1rem;
       margin-bottom: 1rem;
       border-radius: 4px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
       transition: background-color var(--transition-speed);
+      color: var(--color-fondo-principal);
     }
     
     .linear-item:hover {
-      background-color: rgba(74, 144, 226, 0.2);
+      background-color: rgba(98, 0, 238, 0.2);
     }
     
     .linear-item h3 {
       margin-bottom: 0.5rem;
       font-size: 1.2rem;
-      color: var(--color-texto-principal);
+      color: var(--color-fondo-principal);
     }
     
     .linear-item p {
       margin: 0.2rem 0;
-      color: var(--color-texto-principal);
+      color: var(--color-fondo-principal);
     }
     
     /* -------------------------------------------------------
@@ -544,19 +549,29 @@
         width: 100%;
       }
     
-      /* Ajuste para la flecha roja en pantallas pequeñas */
       .current-week-arrow {
         display: none;
       }
     }
     .external-arrow {
       position: absolute;
-      left: -20px; /* Ajusta según tu diseño */
+      left: -20px;
       width: 0;
       height: 0;
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
-      border-right: 10px solid red; /* Color y forma de la flecha */
-      display: none; /* Inicialmente oculta */
-      z-index: 10;  /* Asegura que esté por encima de otros elementos */
+      border-right: 10px solid var(--color-acento-primario);
+      display: none;
+      z-index: 10;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
