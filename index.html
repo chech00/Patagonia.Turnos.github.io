@@ -44,26 +44,32 @@
         <tbody></tbody>
       </table>
     </section>
+
     <section id="linear-view" class="linear-container" style="display: none;">
       <h2 id="linear-title">Agenda de Turnos</h2>
       <ul id="linear-list"></ul>
     </section>
 
-    <div style="text-align:center; margin-top: 1rem;">
+    <!-- Contenedores organizados para botones -->
+    <div class="button-container">
       <button id="calendar-view-btn" class="primary-btn">Vista de Calendario</button>
-      <button id="linear-view-btn" class="primary-btn" style="margin-left: 1rem;">Vista Lineal</button>
+      <button id="linear-view-btn" class="primary-btn">Vista Lineal</button>
     </div>
 
-    <div style="text-align:center;">
+    <div class="button-container">
       <button id="assign-turns" class="primary-btn">Asignar Turnos para la Semana</button>
-      <button id="open-edit-modal" class="primary-btn" style="margin-left: 1rem;" disabled>Editar Semanas</button>
+      <button id="open-edit-modal" class="primary-btn" disabled>Editar Semanas</button>
+    </div>
+
+    <div class="button-container">
+      <button id="manage-additional-btn" class="primary-btn">Gestionar Contactos Adicionales</button>
     </div>
   </main>
 
   <footer>
     <p>&copy; 2025 Empresa de Telecomunicaciones PatagoniaIP SpA - Todos los derechos reservados.</p>
   </footer>
-  
+  <!-- Modal para editar semana -->
   <div id="edit-modal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -94,6 +100,7 @@
     </div>
   </div>
 
+  <!-- Modal de alerta personalizada -->
   <div id="custom-alert" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -101,6 +108,39 @@
       </div>
       <p id="alert-message"></p>
       <button id="close-alert">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modal para gestionar contactos adicionales -->
+  <div id="manage-additional-modal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2>Gestionar Contactos Adicionales de Telegram</h2>
+        <span id="close-additional-modal" class="close-modal">&times;</span>
+      </div>
+      <!-- Desplegable para seleccionar contacto -->
+      <div class="form-group">
+        <label for="contact-select">Seleccionar Contacto:</label>
+        <select id="contact-select">
+          <option value="">-- Seleccione un contacto --</option>
+          <!-- Opciones se llenan dinámicamente -->
+        </select>
+      </div>
+      <div class="button-container">
+        <button id="edit-contact-btn" class="primary-btn" disabled>Editar</button>
+        <button id="delete-contact-btn" class="primary-btn" disabled>Eliminar</button>
+      </div>
+      <hr/>
+      <h3>Agregar / Editar Contacto</h3>
+      <div class="form-group">
+        <label for="contact-name">Nombre:</label>
+        <input type="text" id="contact-name" placeholder="Nombre del contacto"/>
+      </div>
+      <div class="form-group">
+        <label for="contact-id">Chat ID:</label>
+        <input type="text" id="contact-id" placeholder="ID de Telegram"/>
+      </div>
+      <button id="save-contact" class="primary-btn">Guardar Contacto</button>
     </div>
   </div>
   <script src="script.js"></script>
