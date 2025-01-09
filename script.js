@@ -1,4 +1,4 @@
-  // --- Funciones para calcular feriados móviles y formatear fechas ---
+
     function calcularPascua(year) {
       let a = year % 19;
       let b = Math.floor(year / 100);
