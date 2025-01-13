@@ -1,5 +1,4 @@
-
-    function calcularPascua(year) {
+ function calcularPascua(year) {
       let a = year % 19;
       let b = Math.floor(year / 100);
       let c = year % 100;
@@ -16,6 +15,7 @@
       let day = ((h + l - 7 * m + 114) % 31) + 1;
       return new Date(year, month, day);
     }
+
     function obtenerFeriadosMoviles(year) {
       const pascua = calcularPascua(year);
       const viernesSanto = new Date(pascua);
@@ -27,45 +27,36 @@
         { fecha: formatDate(sabadoSanto), nombre: "Sábado Santo" }
       ];
     }
+
     function formatDate(date) {
       const year = date.getFullYear();
       const month = (`0${date.getMonth() + 1}`).slice(-2);
       const day = (`0${date.getDate()}`).slice(-2);
       return `${year}-${month}-${day}`;
     }
+
     function generarFeriados(year) {
       const feriadosFijos = [
         { fecha: `${year}-01-01`, nombre: "Año Nuevo" },
         { fecha: `${year}-05-01`, nombre: "Día del Trabajador" },
-        { fecha: `${year}-05-21`, nombre: "Día de las Glorias Navales" },
-        { fecha: `${year}-06-29`, nombre: "San Pedro y San Pablo" },
-        { fecha: `${year}-07-16`, nombre: "Virgen del Carmen" },
-        { fecha: `${year}-08-15`, nombre: "Asunción de la Virgen" },
-        { fecha: `${year}-10-12`, nombre: "Encuentro de Dos Mundos" },
-        { fecha: `${year}-10-31`, nombre: "Día de las Iglesias Evangélicas y Protestantes" },
-        { fecha: `${year}-11-01`, nombre: "Día de Todos los Santos" },
-        { fecha: `${year}-12-08`, nombre: "Inmaculada Concepción" },
-        { fecha: `${year}-12-25`, nombre: "Navidad" }
       ];
       const feriadosMoviles = obtenerFeriadosMoviles(year);
       return [...feriadosFijos, ...feriadosMoviles];
     }
 
-    // --- Variables Globales y Mapeos ---
+    let tecnicosRed = [];
+    let ingenieros = [];
+    let plantaExterna = [];
+
     let additionalTelegram = {}; 
     const employeeColors = {
-      "Fabián H.":   "#d53206", // Índigo
-      "Marco V.":    "#176795",
-      "Gonzalo S.":  "#0fb733", // Cian Claro
-      "Patricio G.": "#11615a",
-      "Cristian V.": "#3c137b"
+      "Fabian H.": "#2e5e7e",
+      "Marco V.": "#2e5e7e",
+      "Gonzalo S.": "#1b448b",
+      "Patricio G.": "#1b448b",
+      "Cristian V.": "#176fe1"
     };
-    const employeesTelegram = {
-      // Mapea nombres de empleados a sus chat IDs de Telegram aquí
-    };
-    const tecnicosRed   = ["Fabián H.", "Marco V."];
-    const ingenieros    = ["Gonzalo S.", "Patricio G."];
-    const plantaExterna = ["Cristian V."];
+    const employeesTelegram = {};
 
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
@@ -86,35 +77,43 @@
     const linearList = document.getElementById("linear-list");
     const externalArrow = document.getElementById("external-arrow");
 
-    // Elementos para la gestión de contactos adicionales
     const manageAdditionalBtn = document.getElementById("manage-additional-btn");
     const manageAdditionalModal = document.getElementById("manage-additional-modal");
     const closeAdditionalModal = document.getElementById("close-additional-modal");
     const contactNameInput = document.getElementById("contact-name");
     const contactIdInput = document.getElementById("contact-id");
     const saveContactBtn = document.getElementById("save-contact");
+
+    const manageEmpleadosBtn = document.getElementById("manage-empleados-btn");
+    const manageEmpleadosModal = document.getElementById("manage-empleados-modal");
+    const closeEmpleadosModal = document.getElementById("close-empleados-modal");
+    const empleadoNameInput = document.getElementById("empleado-name");
+    const empleadoRolSelect = document.getElementById("empleado-rol");
+    const empleadoChatIdInput = document.getElementById("empleado-chatid");
+    const saveEmpleadoBtn = document.getElementById("save-empleado");
+
+    const editContactBtn = document.getElementById("edit-contact-btn");
+    const deleteContactBtn = document.getElementById("delete-contact-btn");
     let editIndex = null;
 
-    // --- Cargar y guardar contactos ---
-    function cargarContactos() {
-      const almacenados = localStorage.getItem("additionalTelegram");
-      if (almacenados) {
-        additionalTelegram = JSON.parse(almacenados);
-      } else {
-        additionalTelegram = {
-          "Carlos B.": "6346944155",
-          "Roberto C.": "6346944155"
-        };
-      }
-    }
-    function guardarContactos() {
-      localStorage.setItem("additionalTelegram", JSON.stringify(additionalTelegram));
-    }
+    const empleadosSelect = document.getElementById("empleados-select");
+    const editEmployeeBtn = document.getElementById("edit-employee-btn");
+    const deleteEmployeeBtn = document.getElementById("delete-employee-btn");
 
-    // --- Actualización: Renderizar contactos en el desplegable ---
+    // Listener para habilitar/deshabilitar botones editar/eliminar en contactos
+    const contactSelect = document.getElementById("contact-select");
+    contactSelect.addEventListener("change", function() {
+      if (this.value) {
+        editContactBtn.disabled = false;
+        deleteContactBtn.disabled = false;
+      } else {
+        editContactBtn.disabled = true;
+        deleteContactBtn.disabled = true;
+      }
+    });
+
     function renderizarContactosEnSelect() {
       const contactSelect = document.getElementById("contact-select");
-      // Limpiar opciones previas
       contactSelect.innerHTML = `<option value="">-- Seleccione un contacto --</option>`;
       Object.keys(additionalTelegram).forEach(nombre => {
         const option = document.createElement("option");
@@ -122,17 +121,73 @@
         option.textContent = nombre;
         contactSelect.appendChild(option);
       });
-      // Reiniciar botones de editar y eliminar
-      document.getElementById("edit-contact-btn").disabled = true;
-      document.getElementById("delete-contact-btn").disabled = true;
+      editContactBtn.disabled = true;
+      deleteContactBtn.disabled = true;
     }
 
-    // --- Renderizar contactos --- (ya no se usa en esta versión)
-    /* function renderizarContactos() {
-      // Función antigua para renderizar lista simple de contactos
-    } */
+    function cargarYOrganizarEmpleados() {
+      return leerEmpleados().then(empleados => {
+        tecnicosRed = [];
+        ingenieros = [];
+        plantaExterna = [];
 
-    // --- Función para generar el calendario ---
+        empleados.forEach(emp => {
+          switch(emp.rol) {
+            case "Técnico de Red":
+              tecnicosRed.push(emp.nombre);
+              break;
+            case "Ingeniero":
+              ingenieros.push(emp.nombre);
+              break;
+            case "Planta Externa":
+              plantaExterna.push(emp.nombre);
+              break;
+          }
+        });
+
+        empleados.forEach(emp => {
+          employeesTelegram[emp.nombre] = emp.telegramChatId;
+          if(emp.color) {
+            employeeColors[emp.nombre] = emp.color;
+          }
+        });
+
+        console.log("Empleados organizados:", {tecnicosRed, ingenieros, plantaExterna});
+      });
+    }
+
+    function cargarEmpleadosEnSelect(selectId, empleados) {
+      const selectElement = document.getElementById(selectId);
+      selectElement.innerHTML = "";
+      empleados.forEach(nombre => {
+        const option = document.createElement("option");
+        option.value = nombre;
+        option.textContent = nombre;
+        selectElement.appendChild(option);
+      });
+    }
+
+    function cargarEmpleadosEnLista() {
+      leerEmpleados().then(empleados => {
+      }).catch(error => {
+        console.error("Error al cargar empleados para la lista:", error);
+      });
+    }
+
+    function cargarEmpleadosEnSelectGeneral() {
+      empleadosSelect.innerHTML = `<option value="">-- Seleccione un empleado --</option>`;
+      leerEmpleados().then(empleados => {
+        empleados.forEach(emp => {
+          const option = document.createElement("option");
+          option.value = emp.nombre;
+          option.textContent = `${emp.nombre} - ${emp.rol}`;
+          empleadosSelect.appendChild(option);
+        });
+      }).catch(error => {
+        console.error("Error al cargar empleados en select:", error);
+      });
+    }
+
     function generarCalendario(mes, año) {
       calendarBody.innerHTML = "";
       const feriados = generarFeriados(año);
@@ -223,7 +278,6 @@
       resaltarSemanaActual();
     }
 
-    // --- Función para asignar turnos ---
     function asignarTurnos() {
       console.log("Asignando semana #", semanaActual);
       const filas = document.querySelectorAll("#calendar tbody tr");
@@ -264,10 +318,14 @@
       openEditBtn.disabled = false;
 
       const diasSemana = fila.querySelectorAll("td");
-      const fechaInicio = diasSemana.length > 0 ? diasSemana[0].getAttribute("data-fecha") : null;
-      const fechaFin = diasSemana.length > 0 ? diasSemana[diasSemana.length - 1].getAttribute("data-fecha") : null;
+      const fechasSemana = [];
+      diasSemana.forEach(td => {
+        const fechaStr = td.getAttribute("data-fecha");
+        fechasSemana.push(fechaStr);
+      });
 
-      guardarTurnoEnSheet(semanaActual, fechaInicio, fechaFin, tecnico, ingeniero, planta);
+      const asignacion = { tecnico, ingeniero, planta };
+      guardarAsignacionEnFirestore(asignacion, semanaActual, currentYear, currentMonth, fechasSemana);
 
       sendEmailNotification({ tecnico, ingeniero, planta });
       semanaActual++;
@@ -277,57 +335,28 @@
       }
     }
 
-    // --- Función para guardar turno en Google Sheets ---
-    function guardarTurnoEnSheet(semana, fechaInicio, fechaFin, tecnico, ingeniero, planta) {
-      const url = "https://script.google.com/macros/s/AKfycbyNi9FmLzqLYh0Zd3jTDymKJvr4U2D6BIZgso6jVWqrJWtq6zqMGdLGf1Und3_-hgVUcQ/exec";
-      const params = {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          action: "guardarTurno",
-          semana: semana,
-          fechaInicio: fechaInicio,
-          fechaFin: fechaFin,
-          tecnico: tecnico,
-          ingeniero: ingeniero,
-          planta: planta
-        })
-      };
-      fetch(url, params)
-        .then(response => response.json())
-        .then(data => {
-          console.log("Turno guardado:", data);
-        })
-        .catch(error => {
-          console.error("Error al guardar turno:", error);
-        });
-    }
-
-    // --- Funciones de notificación por Telegram ---
     function sendEmailNotification(turnosSemana) {
-      cargarContactos(); 
-      const messageTecnico = `Hola ${turnosSemana.tecnico}, se te ha asignado el turno de esta semana.\n` +
-                             `Ingeniero: ${turnosSemana.ingeniero}\n` +
-                             `Planta: ${turnosSemana.planta}`;
+      cargarContactosDesdeFirestore()
+        .then((contactos) => {
+          additionalTelegram = contactos;
+          const messageTecnico = `Hola ${turnosSemana.tecnico},
+Felicidades!! se te ha asignado el turno de esta semana.\nIngeniero: ${turnosSemana.ingeniero}\nPlanta: ${turnosSemana.planta}`;
 
-      sendTelegramNotification(turnosSemana.tecnico, messageTecnico);
-      sendTelegramNotification(turnosSemana.ingeniero, `Hola ${turnosSemana.ingeniero}, se te ha asignado el turno de esta semana.`);
-      sendTelegramNotification(turnosSemana.planta, `Hola ${turnosSemana.planta}, se te ha asignado el turno de esta semana.`);
+          sendTelegramNotification(turnosSemana.tecnico, messageTecnico);
+          sendTelegramNotification(turnosSemana.ingeniero, `Hola ${turnosSemana.ingeniero},Felicidades!! se te ha asignado el turno de esta semana.`);
+          sendTelegramNotification(turnosSemana.planta, `Hola ${turnosSemana.planta},Felicidades!! se te ha asignado el turno de esta semana.`);
 
-      Object.keys(additionalTelegram).forEach(nombre => {
-        const chatId = additionalTelegram[nombre];
-        const mensajeAdicional = `${nombre}: Los encargados del turno de la semana actual son:\n` +
-                                 `Técnico: ${turnosSemana.tecnico}\n` +
-                                 `Ingeniero: ${turnosSemana.ingeniero}\n` +
-                                 `Planta: ${turnosSemana.planta}`;
-        sendTelegramNotificationConChatId(chatId, mensajeAdicional);
-      });
+          Object.keys(additionalTelegram).forEach(nombre => {
+            const chatId = additionalTelegram[nombre];
+            const mensajeAdicional = `${nombre}: Los encargados del turno de la semana actual son:\nTécnico: ${turnosSemana.tecnico}\nIngeniero: ${turnosSemana.ingeniero}\nPlanta: ${turnosSemana.planta}`;
+            sendTelegramNotificationConChatId(chatId, mensajeAdicional);
+          });
+        })
+        .catch(error => console.error("Error cargando contactos:", error));
     }
 
     function sendTelegramNotification(employeeName, message) {
-      const botToken = "7783582845:AAHWX4551HSQcDHRU_54r7DgJGKY9WB-I6g";
+      const botToken = "7783582845:AAHWX4551HSQcDHRU_54r7DgJGKY9WB-I6g"; 
       const chatId = employeesTelegram[employeeName];
       if (!chatId) {
         console.error(`No se encontró chat ID para ${employeeName}`);
@@ -340,18 +369,12 @@
       };
       fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params)
       })
       .then(response => response.json())
-      .then(data => {
-        console.log(`Mensaje de Telegram enviado a ${employeeName}:`, data);
-      })
-      .catch(error => {
-        console.error(`Error al enviar mensaje a ${employeeName}:`, error);
-      });
+      .then(data => console.log(`Mensaje de Telegram enviado a ${employeeName}:`, data))
+      .catch(error => console.error(`Error al enviar mensaje a ${employeeName}:`, error));
     }
 
     function sendTelegramNotificationConChatId(chatId, message) {
@@ -363,20 +386,15 @@
       };
       fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params)
       })
       .then(response => response.json())
-      .then(data => {
-        console.log(`Mensaje de Telegram enviado al chat ${chatId}:`, data);
-      })
-      .catch(error => {
-        console.error(`Error al enviar mensaje al chat ${chatId}:`, error);
-      });
+      .then(data => console.log(`Mensaje de Telegram enviado al chat ${chatId}:`, data))
+      .catch(error => console.error(`Error al enviar mensaje al chat ${chatId}:`, error));
     }
 
+    
     updateWeekBtn.addEventListener("click", () => {
       console.log("Clic en Actualizar Semana.");
       const assignedWeeks = Object.keys(asignacionesManual);
@@ -460,50 +478,97 @@
       });
     });
 
-    document.getElementById("prev-month").addEventListener("click", () => {
-      currentMonth--;
-      if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-      }
-      generarCalendario(currentMonth, currentYear);
-    });
+ document.getElementById("prev-month").addEventListener("click", () => {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+  generarCalendario(currentMonth, currentYear);
+  cargarAsignacionesGuardadas(currentMonth, currentYear); // Cargar asignaciones guardadas
+});
 
-    document.getElementById("next-month").addEventListener("click", () => {
-      currentMonth++;
-      if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-      }
-      generarCalendario(currentMonth, currentYear);
-    });
+document.getElementById("next-month").addEventListener("click", () => {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  generarCalendario(currentMonth, currentYear);
+  cargarAsignacionesGuardadas(currentMonth, currentYear); // Cargar asignaciones guardadas
+});
+
 
     openEditBtn.addEventListener("click", () => {
-      editModal.style.display = "flex";
+      cargarYOrganizarEmpleados().then(() => {
+        cargarEmpleadosEnSelect("edit-tecnico", tecnicosRed);
+        cargarEmpleadosEnSelect("edit-ingeniero", ingenieros);
+        cargarEmpleadosEnSelect("edit-planta", plantaExterna);
+        editModal.style.display = "flex";
+      }).catch(error => {
+        console.error("Error al cargar empleados:", error);
+      });
     });
+
     closeModalBtn.addEventListener("click", () => {
       editModal.style.display = "none";
     });
+
     window.addEventListener("click", (event) => {
       if (event.target === editModal) {
         editModal.style.display = "none";
       }
     });
 
-    // Gestión del modal de contactos adicionales
     manageAdditionalBtn.addEventListener("click", () => {
-      cargarContactos();
-      renderizarContactosEnSelect();
-      manageAdditionalModal.style.display = "flex";
+      cargarContactosDesdeFirestore()
+        .then((contactos) => {
+          additionalTelegram = contactos;
+          renderizarContactosEnSelect();
+          manageAdditionalModal.style.display = "flex";
+        })
+        .catch(error => {
+          console.error("Error al cargar contactos:", error);
+        });
     });
+
     closeAdditionalModal.addEventListener("click", () => {
       manageAdditionalModal.style.display = "none";
     });
+
     window.addEventListener("click", (event) => {
       if (event.target === manageAdditionalModal) {
         manageAdditionalModal.style.display = "none";
       }
     });
+
+    deleteContactBtn.addEventListener("click", () => {
+      const selected = contactSelect.value;
+      if (!selected) return;
+
+      eliminarContactoEnFirestore(selected)
+        .then(() => {
+          alert("Contacto eliminado correctamente.");
+          return cargarContactosDesdeFirestore();
+        })
+        .then((contactos) => {
+          additionalTelegram = contactos;
+          renderizarContactosEnSelect();
+          contactSelect.value = "";
+          editContactBtn.disabled = true;
+          deleteContactBtn.disabled = true;
+        })
+        .catch(error => console.error("Error al eliminar contacto:", error));
+    });
+
+    editContactBtn.addEventListener("click", () => {
+      const selected = contactSelect.value;
+      if (!selected) return;
+
+      contactNameInput.value = selected;
+      contactIdInput.value = additionalTelegram[selected] || "";
+    });
+
     saveContactBtn.addEventListener("click", () => {
       const nombre = contactNameInput.value.trim();
       const chatId = contactIdInput.value.trim();
@@ -511,66 +576,129 @@
         alert("Por favor, ingrese nombre y chat ID.");
         return;
       }
-      
-      if (editIndex && editIndex !== nombre) {
-        delete additionalTelegram[editIndex];
-      }
-      
-      additionalTelegram[nombre] = chatId;
-      
-      guardarContactos();
-      renderizarContactosEnSelect();
-      
-      contactNameInput.value = "";
-      contactIdInput.value = "";
-      editIndex = null;
+      guardarContactoEnFirestore(nombre, chatId)
+        .then(() => cargarContactosDesdeFirestore())
+        .then((contactos) => {
+          additionalTelegram = contactos;
+          renderizarContactosEnSelect();
+          contactNameInput.value = "";
+          contactIdInput.value = "";
+          contactSelect.value = "";
+          editContactBtn.disabled = true;
+          deleteContactBtn.disabled = true;
+        })
+        .catch(error => {
+          console.error("Error al guardar contacto en Firestore:", error);
+        });
     });
 
-    // Manejadores para selección, edición y eliminación de contactos
-    document.getElementById("contact-select").addEventListener("change", function() {
+    manageEmpleadosBtn.addEventListener("click", () => {
+      cargarEmpleadosEnSelectGeneral();
+      cargarEmpleadosEnLista();
+      manageEmpleadosModal.style.display = "flex";
+    });
+
+    closeEmpleadosModal.addEventListener("click", () => {
+      manageEmpleadosModal.style.display = "none";
+    });
+
+    empleadosSelect.addEventListener("change", function() {
       const seleccionado = this.value;
-      const editBtn = document.getElementById("edit-contact-btn");
-      const deleteBtn = document.getElementById("delete-contact-btn");
-      
       if (seleccionado) {
-        // Habilitar botones al haber un contacto seleccionado
-        editBtn.disabled = false;
-        deleteBtn.disabled = false;
+        editEmployeeBtn.disabled = false;
+        deleteEmployeeBtn.disabled = false;
       } else {
-        editBtn.disabled = true;
-        deleteBtn.disabled = true;
+        editEmployeeBtn.disabled = true;
+        deleteEmployeeBtn.disabled = true;
       }
     });
 
-    document.getElementById("edit-contact-btn").addEventListener("click", () => {
-      const seleccionado = document.getElementById("contact-select").value;
-      if (seleccionado && additionalTelegram[seleccionado]) {
-        // Llenar los inputs con los datos del contacto seleccionado para editar
-        contactNameInput.value = seleccionado;
-        contactIdInput.value = additionalTelegram[seleccionado];
-        editIndex = seleccionado;
-      }
+    editEmployeeBtn.addEventListener("click", () => {
+      const seleccionado = empleadosSelect.value;
+      if (!seleccionado) return;
+      leerEmpleados().then(empleados => {
+        const emp = empleados.find(e => e.nombre === seleccionado);
+        if(emp) {
+          empleadoNameInput.value = emp.nombre;
+          empleadoRolSelect.value = emp.rol;
+          empleadoChatIdInput.value = emp.telegramChatId;
+        }
+      }).catch(error => console.error(error));
     });
 
-    document.getElementById("delete-contact-btn").addEventListener("click", () => {
-      const seleccionado = document.getElementById("contact-select").value;
-      if (seleccionado && additionalTelegram[seleccionado]) {
-        // Eliminar contacto seleccionado
-        delete additionalTelegram[seleccionado];
-        guardarContactos();
-        renderizarContactosEnSelect();
-        // Limpiar selección y deshabilitar botones
-        document.getElementById("contact-select").value = "";
-        document.getElementById("edit-contact-btn").disabled = true;
-        document.getElementById("delete-contact-btn").disabled = true;
+    deleteEmployeeBtn.addEventListener("click", () => {
+      const seleccionado = empleadosSelect.value;
+      if (!seleccionado) return;
+      eliminarEmpleado(seleccionado)
+        .then(() => {
+          alert("Empleado eliminado correctamente.");
+          return cargarYOrganizarEmpleados();
+        })
+        .then(() => {
+          cargarEmpleadosEnSelectGeneral();
+          cargarEmpleadosEnLista();
+          if(editModal.style.display === "flex") {
+            cargarEmpleadosEnSelect("edit-tecnico", tecnicosRed);
+            cargarEmpleadosEnSelect("edit-ingeniero", ingenieros);
+            cargarEmpleadosEnSelect("edit-planta", plantaExterna);
+          }
+        })
+        .catch(error => console.error("Error al eliminar empleado:", error));
+    });
+
+    saveEmpleadoBtn.addEventListener("click", () => {
+      const nombre = empleadoNameInput.value.trim();
+      const rol = empleadoRolSelect.value;
+      const telegramChatId = empleadoChatIdInput.value.trim();
+      if (!nombre || !telegramChatId) {
+        alert("Por favor, ingrese nombre y chat ID.");
+        return;
       }
+      guardarEmpleadoEnFirestore(nombre, rol, telegramChatId)
+        .then(() => {
+          alert("Empleado guardado correctamente.");
+          empleadoNameInput.value = "";
+          empleadoChatIdInput.value = "";
+          manageEmpleadosModal.style.display = "none";
+          return cargarYOrganizarEmpleados();
+        })
+        .then(() => {
+          cargarEmpleadosEnSelectGeneral();
+          cargarEmpleadosEnLista();
+          if(editModal.style.display === "flex") {
+            cargarEmpleadosEnSelect("edit-tecnico", tecnicosRed);
+            cargarEmpleadosEnSelect("edit-ingeniero", ingenieros);
+            cargarEmpleadosEnSelect("edit-planta", plantaExterna);
+          }
+        })
+        .catch(error => {
+          console.error("Error al guardar empleado:", error);
+        });
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-      generarCalendario(currentMonth, currentYear);
-      assignTurnsBtn.addEventListener("click", asignarTurnos);
-      calendarViewBtn.disabled = true;
-      inicializarAutomatizacion();
+      cargarContactosDesdeFirestore()
+        .then((contactos) => {
+          additionalTelegram = contactos;
+          renderizarContactosEnSelect();
+        })
+        .catch(error => {
+          console.error("Error al cargar contactos desde Firestore:", error);
+        });
+      cargarYOrganizarEmpleados()
+        .then(() => {
+          generarCalendario(currentMonth, currentYear);
+          // Cargar asignaciones guardadas y luego configurar el evento del botón
+          return cargarAsignacionesGuardadas(currentMonth, currentYear);
+        })
+        .then(() => {
+          assignTurnsBtn.addEventListener("click", asignarTurnos);
+          calendarViewBtn.disabled = true;
+          inicializarAutomatizacion();
+        })
+        .catch(error => {
+          console.error("Error al inicializar la página:", error);
+        });
     });
 
     function showCustomAlert(message) {
@@ -602,10 +730,6 @@
       calendarViewBtn.disabled = false;
       linearViewBtn.disabled = true;
       generarVistaLineal();
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      calendarViewBtn.disabled = true;
     });
 
     function generarVistaLineal() {
@@ -702,3 +826,204 @@
       const observer = new MutationObserver(resaltarSemanaActual);
       observer.observe(calendarBody, { childList: true, subtree: true });
     }
+
+    // Nueva funcionalidad: Búsqueda de asignación por fecha
+    document.getElementById("search-button").addEventListener("click", () => {
+      const dateInput = document.getElementById("search-date").value;
+      const resultDiv = document.getElementById("search-result");
+      resultDiv.innerHTML = ""; // Limpiar resultados anteriores
+
+      if (!dateInput) {
+        resultDiv.textContent = "Por favor, ingrese una fecha válida.";
+        return;
+      }
+
+      const fechaBuscada = new Date(dateInput);
+
+      // Consultar todas las asignaciones para luego filtrar por fecha.
+      db.collection('AsignacionesSemanales').get()
+        .then(querySnapshot => {
+          let encontrado = false;
+          querySnapshot.forEach(doc => {
+            const data = doc.data();
+            const inicio = new Date(data.fechaInicio);
+            const fin = new Date(data.fechaFin);
+
+            // Verifica si la fecha buscada está entre la fecha de inicio y fin
+            if (fechaBuscada >= inicio && fechaBuscada <= fin) {
+              encontrado = true;
+              resultDiv.innerHTML = `
+                <h3>Semana ${data.semana} (${data.fechaInicio} - ${data.fechaFin})</h3>
+                <p><strong>Técnico:</strong> ${data.tecnico}</p>
+                <p><strong>Ingeniero:</strong> ${data.ingeniero}</p>
+                <p><strong>Planta Externa:</strong> ${data.planta}</p>
+              `;
+            }
+          });
+          if (!encontrado) {
+            resultDiv.textContent = "No se encontró ninguna asignación para la fecha ingresada.";
+          }
+        })
+        .catch(error => {
+          console.error("Error al buscar asignaciones:", error);
+          resultDiv.textContent = "Ocurrió un error al buscar la asignación.";
+        });
+    });
+
+    function cargarAsignacionesGuardadas(mes, año) {
+      return db.collection('AsignacionesSemanales')
+        .where('mes', '==', mes)
+        .where('año', '==', año)
+        .get()
+        .then(querySnapshot => {
+          let ultimaSemanaAsignada = -1;
+          querySnapshot.forEach(doc => {
+            const data = doc.data();
+            const semanaIndex = data.semana - 1;
+            
+            // Almacenar la asignación recuperada en asignacionesManual.
+            asignacionesManual[semanaIndex] = {
+              tecnico: data.tecnico,
+              ingeniero: data.ingeniero,
+              planta: data.planta
+            };
+
+            // Actualizar el calendario para esa semana.
+            const filas = document.querySelectorAll("#calendar tbody tr");
+            if(filas[semanaIndex]) {
+              const fila = filas[semanaIndex];
+              const dias = fila.querySelectorAll("td");
+              dias.forEach((dia) => {
+                const nombresDiv = dia.querySelectorAll(".nombre");
+                if (nombresDiv.length === 3) {
+                  nombresDiv[0].textContent = data.tecnico;
+                  nombresDiv[0].style.backgroundColor = employeeColors[data.tecnico] || "#FFFFFF";
+                  nombresDiv[1].textContent = data.ingeniero;
+                  nombresDiv[1].style.backgroundColor = employeeColors[data.ingeniero] || "#FFFFFF";
+                  nombresDiv[2].textContent = data.planta;
+                  nombresDiv[2].style.backgroundColor = employeeColors[data.planta] || "#FFFFFF";
+                }
+              });
+              fila.classList.add("assigned-week");
+            }
+
+            if (semanaIndex > ultimaSemanaAsignada) {
+              ultimaSemanaAsignada = semanaIndex;
+            }
+          });
+
+          semanaActual = ultimaSemanaAsignada + 1;
+        })
+        .catch(error => {
+          console.error("Error al cargar asignaciones guardadas:", error);
+        });
+    }
+          
+          // Validación para contactos adicionales
+saveContactBtn.addEventListener("click", () => {
+  const nombre = contactNameInput.value.trim();
+  const chatId = contactIdInput.value.trim();
+
+  // Limpiar errores anteriores
+  const errorElements = document.querySelectorAll(".error-message");
+  errorElements.forEach(el => el.remove());
+
+  let hasError = false;
+
+  // Validar nombre
+  if (!nombre) {
+    mostrarError(contactNameInput, "Por favor, ingrese un nombre.");
+    hasError = true;
+  }
+
+  // Validar ID de Telegram
+  if (!chatId) {
+    mostrarError(contactIdInput, "Por favor, ingrese un ID de Telegram.");
+    hasError = true;
+  } else if (!/^\d+$/.test(chatId)) {
+    mostrarError(contactIdInput, "El ID de Telegram debe contener solo números.");
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  // Guardar contacto en Firestore
+  guardarContactoEnFirestore(nombre, chatId)
+    .then(() => cargarContactosDesdeFirestore())
+    .then(contactos => {
+      additionalTelegram = contactos;
+      renderizarContactosEnSelect();
+      contactNameInput.value = "";
+      contactIdInput.value = "";
+      contactSelect.value = "";
+      editContactBtn.disabled = true;
+      deleteContactBtn.disabled = true;
+    })
+    .catch(error => {
+      console.error("Error al guardar contacto en Firestore:", error);
+    });
+});
+
+// Validación para empleados
+saveEmpleadoBtn.addEventListener("click", () => {
+  const nombre = empleadoNameInput.value.trim();
+  const rol = empleadoRolSelect.value;
+  const telegramChatId = empleadoChatIdInput.value.trim();
+
+  // Limpiar errores anteriores
+  const errorElements = document.querySelectorAll(".error-message");
+  errorElements.forEach(el => el.remove());
+
+  let hasError = false;
+
+  // Validar nombre
+  if (!nombre) {
+    mostrarError(empleadoNameInput, "Por favor, ingrese un nombre.");
+    hasError = true;
+  }
+
+  // Validar ID de Telegram
+  if (!telegramChatId) {
+    mostrarError(empleadoChatIdInput, "Por favor, ingrese un ID de Telegram.");
+    hasError = true;
+  } else if (!/^\d+$/.test(telegramChatId)) {
+    mostrarError(empleadoChatIdInput, "El ID de Telegram debe contener solo números.");
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  // Guardar empleado en Firestore
+  guardarEmpleadoEnFirestore(nombre, rol, telegramChatId)
+    .then(() => {
+      alert("Empleado guardado correctamente.");
+      empleadoNameInput.value = "";
+      empleadoChatIdInput.value = "";
+      manageEmpleadosModal.style.display = "none";
+      return cargarYOrganizarEmpleados();
+    })
+    .then(() => {
+      cargarEmpleadosEnSelectGeneral();
+      cargarEmpleadosEnLista();
+      if (editModal.style.display === "flex") {
+        cargarEmpleadosEnSelect("edit-tecnico", tecnicosRed);
+        cargarEmpleadosEnSelect("edit-ingeniero", ingenieros);
+        cargarEmpleadosEnSelect("edit-planta", plantaExterna);
+      }
+    })
+    .catch(error => {
+      console.error("Error al guardar empleado:", error);
+    });
+});
+
+// Función para mostrar mensajes de error
+function mostrarError(inputElement, message) {
+  const errorMessage = document.createElement("span");
+  errorMessage.className = "error-message";
+  errorMessage.style.color = "var(--color-error)";
+  errorMessage.style.fontSize = "0.9rem";
+  errorMessage.style.marginTop = "4px";
+  errorMessage.textContent = message;
+
+  inputElement.parentElement.appendChild(errorMessage);
+}
