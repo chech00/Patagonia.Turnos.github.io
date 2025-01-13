@@ -1,10 +1,10 @@
-:root {
+  :root {
   /* Paleta inspirada en YouTube Modo Oscuro */
   --color-fondo-principal: #181818;       /* Fondo casi negro similar al modo oscuro de YouTube */
   --color-fondo-secundario: #202020;      /* Tonos ligeramente más claros para secciones internas */
   --color-texto-principal: #e5e5e5;       /* Texto claro para contraste en fondo oscuro */
   --color-texto-secundario: #aaaaaa;      /* Texto secundario en gris claro */
-  --color-acento-primario: #0b444a;       /* Rojo distintivo de YouTube para elementos destacados */
+  --color-acento-primario: #132ca8;       /* Rojo distintivo de YouTube para elementos destacados */
   --color-acento-secundario: #303030;     /* Gris oscuro para bordes, fondos secundarios u otros acentos */
   --color-error: #ff5252;                 /* Rojo brillante para errores */
   --color-exito: #4caf50;                 /* Verde para mensajes de éxito */
@@ -13,6 +13,12 @@
   --font-primary: 'Roboto', sans-serif;
   --font-secondary: 'Montserrat', sans-serif;
   --transition-speed: 0.3s;
+}
+
+     .error-message {
+  color: var(--color-error);
+  font-size: 0.9rem;
+  margin-top: 4px;
 }
 
 
@@ -273,6 +279,45 @@
       transform: none;
       color: #FFFFFF;
     }
+     /* Contenedores de botones agrupados */
+.botones-vistas,
+.botones-acciones,
+.botones-gestion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+/* Estilos para los botones agrupados */
+.botones-vistas .primary-btn,
+.botones-acciones .primary-btn,
+.botones-gestion .primary-btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background var(--transition-speed), transform var(--transition-speed);
+}
+
+/* Efectos hover para los botones */
+.botones-vistas .primary-btn:hover,
+.botones-acciones .primary-btn:hover,
+.botones-gestion .primary-btn:hover {
+  background: var(--color-acento-secundario);
+  transform: translateY(-2px);
+}
+
+/* Adaptación Responsive para dispositivos móviles */
+@media (max-width: 600px) {
+  .botones-vistas,
+  .botones-acciones,
+  .botones-gestion {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
     
     /* -------------------------------------------------------
     FOOTER
